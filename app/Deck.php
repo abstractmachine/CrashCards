@@ -20,4 +20,9 @@ class Deck extends Model
 	{
 		return $this->belongsToMany(Card::class)->withPivot('category_id');
 	}
+
+	public function author()
+	{
+		return $this->belongsTo(User::class, 'user_id');
+	}
 }

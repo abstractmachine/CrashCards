@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Workshop::class, 'author_id');
     }
+
+    public function decks()
+    {
+        return $this->hasMany(Deck::class);
+    }
 }

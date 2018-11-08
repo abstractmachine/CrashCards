@@ -40,6 +40,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('cards-manager') }}">Cards</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('decks-manager') }}">Decks</a>
+                        </li>
 
                         <!-- Authentication Links -->
                         @guest

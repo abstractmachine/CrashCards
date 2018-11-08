@@ -14315,6 +14315,7 @@ __webpack_require__(16);
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('board', __webpack_require__(42));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('card-table', __webpack_require__(48));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('deck-bag', __webpack_require__(62));
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     el: '#app'
@@ -48000,6 +48001,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -48027,7 +48040,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.allCards.filter(function (card) {
                 var result = false;
                 if (card.name.match(_this.search) || card.subtitle.match(_this.search) || card.author.username.match(_this.search)) result = true;
-                if (_this.onlyMe) {
+                if (_this.onlyMe && _this.author != null) {
                     if (_this.author.id != card.author.id) result = false;
                 }
                 return result;
@@ -48061,6 +48074,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.author != null) {
                 this.newCard.author = this.author.id;
             }
+
             if (this.newCard.name != null && this.newCard.subtitle != null && this.newCard.author != null) {
                 $.post(this.urlAjax + '/add', {
                     '_token': $('meta[name=csrf-token]').attr('content'),
@@ -48136,354 +48150,375 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.search,
-          expression: "search"
-        }
-      ],
-      attrs: { type: "text" },
-      domProps: { value: _vm.search },
-      on: {
-        input: function($event) {
-          if ($event.target.composing) {
-            return
-          }
-          _vm.search = $event.target.value
-        }
-      }
-    }),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.onlyMe,
-            expression: "onlyMe"
-          }
-        ],
-        attrs: { type: "checkbox" },
-        domProps: {
-          checked: Array.isArray(_vm.onlyMe)
-            ? _vm._i(_vm.onlyMe, null) > -1
-            : _vm.onlyMe
-        },
-        on: {
-          change: function($event) {
-            var $$a = _vm.onlyMe,
-              $$el = $event.target,
-              $$c = $$el.checked ? true : false
-            if (Array.isArray($$a)) {
-              var $$v = null,
-                $$i = _vm._i($$a, $$v)
-              if ($$el.checked) {
-                $$i < 0 && (_vm.onlyMe = $$a.concat([$$v]))
-              } else {
-                $$i > -1 &&
-                  (_vm.onlyMe = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
-              }
-            } else {
-              _vm.onlyMe = $$c
-            }
-          }
-        }
-      }),
-      _vm._v(" "),
-      _c("p", [_vm._v("Only Mine")])
-    ]),
-    _vm._v(" "),
-    _c("table", { staticClass: "table" }, [
-      _c("thead", [
-        _c("tr", [
-          _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              staticClass: "clickable",
-              attrs: { scope: "col" },
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col mb-3" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.search,
+                  expression: "search"
+                }
+              ],
+              attrs: { type: "text" },
+              domProps: { value: _vm.search },
               on: {
-                click: function($event) {
-                  _vm.orderBy("name")
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.search = $event.target.value
                 }
               }
-            },
-            [_vm._v("Title")]
-          ),
+            })
+          ]),
           _vm._v(" "),
-          _c(
-            "th",
-            {
-              attrs: { scope: "col" },
-              on: {
-                click: function($event) {
-                  _vm.orderBy("subtitle")
-                }
-              }
-            },
-            [_vm._v("Subtitle")]
-          ),
-          _vm._v(" "),
-          _c(
-            "th",
-            {
-              attrs: { scope: "col" },
-              on: {
-                click: function($event) {
-                  _vm.orderBy("author.name")
-                }
-              }
-            },
-            [_vm._v("Author")]
-          ),
-          _vm._v(" "),
-          _c("th", { attrs: { scope: "col" } }, [_vm._v("interaction")])
+          _vm.author != null
+            ? _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.onlyMe,
+                      expression: "onlyMe"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.onlyMe)
+                      ? _vm._i(_vm.onlyMe, null) > -1
+                      : _vm.onlyMe
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.onlyMe,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.onlyMe = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.onlyMe = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.onlyMe = $$c
+                      }
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("p", [_vm._v("Only Mine")])
+              ])
+            : _vm._e()
         ])
       ]),
       _vm._v(" "),
-      _c(
-        "tbody",
-        [
-          _vm.author != null
-            ? _c("tr", [
-                _c("th", { attrs: { scope: "row" } }, [_vm._v("X")]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.newCard.name,
-                        expression: "newCard.name"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.newCard.name },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+      _c("table", { staticClass: "table" }, [
+        _c("thead", [
+          _c("tr", [
+            _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                staticClass: "clickable",
+                attrs: { scope: "col" },
+                on: {
+                  click: function($event) {
+                    _vm.orderBy("name")
+                  }
+                }
+              },
+              [_vm._v("Title")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                attrs: { scope: "col" },
+                on: {
+                  click: function($event) {
+                    _vm.orderBy("subtitle")
+                  }
+                }
+              },
+              [_vm._v("Subtitle")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                attrs: { scope: "col" },
+                on: {
+                  click: function($event) {
+                    _vm.orderBy("author.name")
+                  }
+                }
+              },
+              [_vm._v("Author")]
+            ),
+            _vm._v(" "),
+            _vm.author != null
+              ? _c("th", { attrs: { scope: "col" } }, [_vm._v("interaction")])
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          [
+            _vm.author != null
+              ? _c("tr", [
+                  _c("th", { attrs: { scope: "row" } }, [_vm._v("X")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newCard.name,
+                          expression: "newCard.name"
                         }
-                        _vm.$set(_vm.newCard, "name", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.newCard.subtitle,
-                        expression: "newCard.subtitle"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text" },
-                    domProps: { value: _vm.newCard.subtitle },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.newCard.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.newCard, "name", $event.target.value)
                         }
-                        _vm.$set(_vm.newCard, "subtitle", $event.target.value)
                       }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "text", readonly: "" },
-                    domProps: { value: _vm.author.username }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-dark",
-                      attrs: { type: "button" },
-                      on: { click: _vm.addNewCard }
-                    },
-                    [_vm._v("Add Card")]
-                  )
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newCard.subtitle,
+                          expression: "newCard.subtitle"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.newCard.subtitle },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.newCard, "subtitle", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "text", readonly: "" },
+                      domProps: { value: _vm.author.username }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-dark",
+                        attrs: { type: "button" },
+                        on: { click: _vm.addNewCard }
+                      },
+                      [_vm._v("Add Card")]
+                    )
+                  ])
                 ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm._l(_vm.filteredCards, function(card, key) {
-            return [
-              !card.editMode
-                ? _c("tr", [
-                    _c("th", { attrs: { scope: "row" } }, [
-                      _vm._v(_vm._s(card.id))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(card.name))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(card.subtitle))]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _vm._v(_vm._s(card.author.username + " " + _vm.author.id))
-                    ]),
-                    _vm._v(" "),
-                    _vm.author.id == card.author.id
-                      ? _c("td", [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-dark",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  _vm.toggleEditMode(card)
-                                }
-                              }
-                            },
-                            [_vm._v("modify")]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "close",
-                              attrs: { type: "button", "aria-label": "Close" },
-                              on: {
-                                click: function($event) {
-                                  _vm.deleteCard(card)
-                                }
-                              }
-                            },
-                            [
-                              _c("span", { attrs: { "aria-hidden": "true" } }, [
-                                _vm._v("×")
-                              ])
-                            ]
-                          )
-                        ])
-                      : _vm._e()
-                  ])
-                : _c("tr", [
-                    _c("th", { attrs: { scope: "row" } }, [
-                      _vm._v(" " + _vm._s(_vm.cardToUpdate(card).id))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.cardToUpdate(card).name,
-                            expression: "cardToUpdate(card).name"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.cardToUpdate(card).name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.cardToUpdate(card),
-                              "name",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.cardToUpdate(card).subtitle,
-                            expression: "cardToUpdate(card).subtitle"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.cardToUpdate(card).subtitle },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.cardToUpdate(card),
-                              "subtitle",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("input", {
-                        staticClass: "form-control",
-                        attrs: { type: "text", readonly: "" },
-                        domProps: { value: _vm.author.username }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-dark",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              _vm.updateCard(_vm.cardToUpdate(card))
-                            }
-                          }
-                        },
-                        [_vm._v("Update")]
-                      ),
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.filteredCards, function(card, key) {
+              return [
+                !card.editMode
+                  ? _c("tr", [
+                      _c("th", { attrs: { scope: "row" } }, [
+                        _vm._v(_vm._s(card.id))
+                      ]),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "close",
-                          attrs: { type: "button", "aria-label": "Close" },
+                      _c("td", [_vm._v(_vm._s(card.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(card.subtitle))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(card.author.username))]),
+                      _vm._v(" "),
+                      _vm.author != null
+                        ? _c("td", [
+                            _vm.author.id == card.author.id
+                              ? _c("div", { staticClass: "for-group" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-dark",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.toggleEditMode(card)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("modify")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "close",
+                                      attrs: {
+                                        type: "button",
+                                        "aria-label": "Close"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          _vm.deleteCard(card)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        { attrs: { "aria-hidden": "true" } },
+                                        [_vm._v("×")]
+                                      )
+                                    ]
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e()
+                    ])
+                  : _c("tr", [
+                      _c("th", { attrs: { scope: "row" } }, [
+                        _vm._v(" " + _vm._s(_vm.cardToUpdate(card).id))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.cardToUpdate(card).name,
+                              expression: "cardToUpdate(card).name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.cardToUpdate(card).name },
                           on: {
-                            click: function($event) {
-                              _vm.toggleEditMode(_vm.cardToUpdate(card))
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.cardToUpdate(card),
+                                "name",
+                                $event.target.value
+                              )
                             }
                           }
-                        },
-                        [
-                          _c("span", { attrs: { "aria-hidden": "true" } }, [
-                            _vm._v("×")
-                          ])
-                        ]
-                      )
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.cardToUpdate(card).subtitle,
+                              expression: "cardToUpdate(card).subtitle"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.cardToUpdate(card).subtitle },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.cardToUpdate(card),
+                                "subtitle",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: { type: "text", readonly: "" },
+                          domProps: { value: _vm.author.username }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-dark",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                _vm.updateCard(_vm.cardToUpdate(card))
+                              }
+                            }
+                          },
+                          [_vm._v("Update")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "close",
+                            attrs: { type: "button", "aria-label": "Close" },
+                            on: {
+                              click: function($event) {
+                                _vm.toggleEditMode(_vm.cardToUpdate(card))
+                              }
+                            }
+                          },
+                          [
+                            _c("span", { attrs: { "aria-hidden": "true" } }, [
+                              _vm._v("×")
+                            ])
+                          ]
+                        )
+                      ])
                     ])
-                  ])
-            ]
-          })
-        ],
-        2
-      )
+              ]
+            })
+          ],
+          2
+        )
+      ])
     ])
   ])
 }
@@ -48502,6 +48537,443 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(63)
+}
+var normalizeComponent = __webpack_require__(13)
+/* script */
+var __vue_script__ = __webpack_require__(65)
+/* template */
+var __vue_template__ = __webpack_require__(66)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-72161c84"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/DeckBag.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-72161c84", Component.options)
+  } else {
+    hotAPI.reload("data-v-72161c84", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(64);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(12)("ed57a612", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72161c84\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./DeckBag.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-72161c84\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./DeckBag.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card[data-v-72161c84] {\n  width: 150px;\n  height: 300px;\n  position: relative;\n}\n.card .category-name[data-v-72161c84] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        decks: {},
+        urlAjax: {},
+        author: {}
+    },
+    data: function data() {
+        return {
+            allDecks: this.decks,
+            compareOrder: true,
+            toCompare: '',
+            search: "",
+            newDeck: {}
+        };
+    },
+    computed: {},
+    mounted: function mounted() {
+        // for (var i = 0; i < this.allDecks.length; i++) {
+        //     this.allDecks[i].editMode = false;
+        //     this.cardsToUpdate.push(this.allDecks[i]);
+        // }
+    },
+
+    methods: {
+        // cardToUpdate: function(card){
+        //    return this.cardsToUpdate[this.cardsToUpdate.indexOf(card)];
+        // },
+        orderBy: function orderBy(target) {
+            this.compareOrder = !this.compareOrder;
+            this.toCompare = target;
+            this.allDecks.sort(this.compare);
+        },
+        compare: function compare(a, b) {
+            if (a[this.toCompare] < b[this.toCompare]) return this.compareOrder ? -1 : 1;
+            if (a[this.toCompare] > b[this.toCompare]) return this.compareOrder ? 1 : -1;
+            return 0;
+        },
+        addNewDeck: function addNewDeck() {
+            var vueApp = this;
+
+            if (this.author != null) {
+                this.newDeck.author = this.author.id;
+            }
+
+            if (this.newDeck.name != null && this.newDeck.author != null) {
+                $.post(this.urlAjax + '/add', {
+                    '_token': $('meta[name=csrf-token]').attr('content'),
+                    '_data': this.newDeck
+                }, function (data) {
+                    console.log(data);
+                    if (data != 'null' || data != '0') {
+
+                        vueApp.allDecks.push(data);
+                        vueApp.cardsToUpdate.push(data);
+                        vueApp.newDeck = {};
+                    }
+                }.bind(vueApp));
+            }
+        },
+        updateDeck: function updateDeck(card) {
+            // var vueApp = this;
+            // this.toUpdate = card;
+
+            // if(this.toUpdate.name != null && this.toUpdate.subtitle != null && this.toUpdate.author != null){
+            //     $.post(this.urlAjax + '/update', {
+            //         '_token': $('meta[name=csrf-token]').attr('content'),
+            //         '_data': this.toUpdate,
+            //     },function(data){  
+            //         // console.log(data)
+            //         if(data != 'null' || data != '0' || data != 'false'){
+            //             var card = vueApp.allDecks[vueApp.allDecks.indexOf(vueApp.toUpdate)];
+            //             console.log(vueApp.toUpdate)
+            //             card.name = data['name'];
+            //             card.subtitle = data.subtitle;
+            //             card.author = data.author;
+            //             this.toggleEditMode(card);
+            //         }
+            //     }.bind(vueApp));
+            // }
+        },
+        toggleEditMode: function toggleEditMode(card) {
+
+            // console.log(card)
+            // card = this.allDecks[this.allDecks.indexOf(card)];
+            // card.editMode = !card.editMode;
+
+        },
+        deleteDeck: function deleteDeck(card) {
+
+            // var vueApp = this;
+            // vueApp.toDelete = card;
+
+            // $.post(this.urlAjax + '/remove', {
+            //     '_token': $('meta[name=csrf-token]').attr('content'),
+            //     '_data': card,
+            // },function(data){  
+            //     console.log(data)
+            //     if(data === 'true'){
+            //         var index = vueApp.allDecks.indexOf(vueApp.toDelete);
+            //         console.log('index = ' + index)
+            //         vueApp.allDecks.splice(index,1);
+            //         vueApp.cardsToUpdate.splice(index,1);
+            //     }
+            // }.bind(vueApp));
+        }
+
+    }
+});
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _c("table", { staticClass: "table" }, [
+        _c("thead", [
+          _c("tr", [
+            _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                staticClass: "clickable",
+                attrs: { scope: "col" },
+                on: {
+                  click: function($event) {
+                    _vm.orderBy("name")
+                  }
+                }
+              },
+              [_vm._v("Title")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                attrs: { scope: "col" },
+                on: {
+                  click: function($event) {
+                    _vm.orderBy("author.name")
+                  }
+                }
+              },
+              [_vm._v("Author")]
+            ),
+            _vm._v(" "),
+            _vm.author != null
+              ? _c("th", { attrs: { scope: "col" } }, [_vm._v("interaction")])
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          [
+            _vm.author != null
+              ? _c("tr", [
+                  _c("th", { attrs: { scope: "row" } }, [_vm._v("X")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.newDeck.name,
+                          expression: "newDeck.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.newDeck.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.newDeck, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { type: "text", readonly: "" },
+                      domProps: { value: _vm.author.username }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-dark",
+                        attrs: { type: "button" },
+                        on: { click: _vm.addNewDeck }
+                      },
+                      [_vm._v("New Deck")]
+                    )
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(_vm.allDecks, function(deck, key) {
+              return [
+                _c("tr", [
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _vm._v(_vm._s(deck.id))
+                  ]),
+                  _vm._v(" "),
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _vm._v(_vm._s(deck.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(deck.author.username))]),
+                  _vm._v(" "),
+                  _vm.author != null
+                    ? _c("td", [
+                        _vm.author.id == deck.author.id
+                          ? _c("div", { staticClass: "for-group" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-dark",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.toggleEditMode(deck)
+                                    }
+                                  }
+                                },
+                                [_vm._v("modify")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "close",
+                                  attrs: {
+                                    type: "button",
+                                    "aria-label": "Close"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.deleteDeck(deck)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { attrs: { "aria-hidden": "true" } },
+                                    [_vm._v("×")]
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    : _vm._e()
+                ])
+              ]
+            })
+          ],
+          2
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-72161c84", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -21,3 +21,6 @@ Route::post('/cards/remove', 'CardController@destroy')->name('remove-card');
 Route::post('/cards/update', 'CardController@update')->name('update-card');
 
 Route::get('/decks', 'DeckController@index')->name('decks-manager');
+Route::post('/decks/add', 'DeckController@create')->name('add-deck');
+Route::post('/decks/remove', 'DeckController@destroy')->name('remove-deck');
+Route::post('/decks/update', 'DeckController@update')->name('update-deck');

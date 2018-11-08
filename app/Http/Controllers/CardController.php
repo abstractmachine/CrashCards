@@ -16,6 +16,7 @@ class CardController extends Controller
         foreach ($cards as $key => $card) {
             $card->editMode = false;
         }
+        
         return view('cards-manager', compact('cards'));
     }
 
