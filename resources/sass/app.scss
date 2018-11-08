@@ -1,0 +1,18 @@
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+$material-icons-font-path: '~material-icons/iconfont/';
+@import '~material-icons/iconfont/material-icons.scss';
+
+@import 'variables';
+@import 'fonts';
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.clickable{
+    cursor: pointer;
+}
