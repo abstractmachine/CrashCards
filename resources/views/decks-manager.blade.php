@@ -8,7 +8,7 @@
             <div class="col border-dark border">
                 
                 <h3>Decks</h3>
-                
+                <p>{{ $decks->toJson() }}</p>
                 <deck-bag :decks="{{ $decks->toJson() }}"
                             url-ajax="{{ route('decks-manager') }}" 
                             @if(Auth::check())

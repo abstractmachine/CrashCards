@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Card;
+use App\Category;
 use App\Deck;
 use App\User;
 use Illuminate\Http\Request;
@@ -9,59 +11,177 @@ use Illuminate\Support\Facades\Auth;
 
 class DeckController extends Controller
 {
+
+    //     ____            __
+    //    / __ \___  _____/ /_______
+    //   / / / / _ \/ ___/ //_/ ___/
+    //  / /_/ /  __/ /__/ ,< (__  )
+    // /_____/\___/\___/_/|_/____/
+
     public function index()
     {   
-        $user = Auth::user();
-
-        $decks = Deck::where('user_id', $user->id)->get()->load('author');
+        if(Auth::check()){
+            $user = Auth::user();
+        }
+        else{
+            $user = false;
+        }
         
-        return view('decks-manager', compact('decks'));
+        $decks = Deck::all()->load('author');
+
+        foreach ($decks as $key => $deck) {
+            if(!isset($deck->author))
+                Deck::destroy($deck->id);
+        }
+
+        
+        return view('decks-manager', compact('decks', 'user'));
     }
 
-    public function create(Request $request)
+    public function destroy(Request $request)
     {
         if ($request->ajax()) {
 
             $request->validate([
-                '_data.name' => 'required',
+                '_data.id' => 'required',
                 '_data.author' => 'required',
             ]);
 
-            $newDeck = new Deck();
+            $user = Auth::user();
+            $deckUser = User::find($request->_data['author']['id']);
 
-            $newDeck->name = $request->_data['name'];
-            $newDeck->save();
-            $newDeck->author()->associate(User::find($request->_data['author']));
-            $newDeck->save();
+            if($deckUser->id == $user->id){
 
-            return $newDeck;
+                $deck = Deck::find($request->_data['id']);
+                $deck->delete();
 
+                return 'true';
+            }else{
+                return 'false';
+            }
+        }
+    }
+
+    //     ____            __
+    //    / __ \___  _____/ /__
+    //   / / / / _ \/ ___/ //_/
+    //  / /_/ /  __/ /__/ ,<
+    // /_____/\___/\___/_/|_|
+
+    public function indexDeck(Deck $deck){
+        $user = null;
+
+        $user = Auth::user();
+        if($deck->author->id != $user->id){
+            return redirect()->route('decks-manager'); 
+        }
+        
+        $cards = Card::all()->load('decks');
+
+        $deck->load('categories');
+        $deck->load('cards');
+
+        foreach ($deck->categories as $key => $category) {
+            $category->cards = $deck->cards->where('pivot.category_id', $category->id);
+        }
+
+        return view('deck-manager', compact('deck', 'user', 'cards'));
+    }
+
+    public function create(Request $request)
+    {
+        if(!Auth::check()){
+            back();
+        }
+
+        $user = Auth::user();
+
+        $deck = new Deck();
+        $deck->save();
+        $deck->author()->associate($user);
+        $deck->save();
+
+        return redirect()->route('deck-manager', compact('deck')); 
+
+    }
+
+    public function addCategory(Request $request){
+
+        if ($request->ajax()) {
+
+            $request->validate([
+                '_data.id' => 'required',
+            ]);
+
+            $user = Auth::user();
+            $deck = Deck::find($request->_data['id']);
+
+            if($deck->author->id == $user->id){
+                $category = new Category();
+                $category->save();
+
+                $deck->categories()->save($category);
+
+                $category->cards = collect([]);
+
+                // $category->items = [];
+
+                return $category;
+            }else{
+                return 'false';
+            }
+        }
+    }
+
+    public function detachCard(Deck $deck, Card $card, Category $category, Request $request){
+        // card == pivot de la relation
+        if ($request->ajax()) {
+
+            $user = Auth::user();
+
+            if($deck->author->id == $user->id){
+
+                // $deck->cards->where('id', $card->id)->first()->detach();
+
+                $pivotId = $card->decks()->wherePivot('category_id', $category->id)->get()->where('id', $deck->id)->first()->pivot->id;
+
+                $deck->cards()
+                     ->wherePivot('card_id', $card->id)
+                     ->wherePivot('category_id', $category->id)
+                     ->wherePivot('id', '=', $pivotId)
+                     ->detach();
+
+                // $category->items = [];
+
+                return  'true';
+            }else{
+                return 'false';
+            }
+        }
+
+    }
+    public function saveCard(Deck $deck, Card $card, Category $category, Request $request){
+
+        if ($request->ajax()) {
+
+            $user = Auth::user();
+
+            if($deck->author->id == $user->id){
+                // $category->items = [];
+
+                $deck->cards()->attach($card, ['category_id' => $category->id]);
+                $deck->save();
+
+                // $card->pivot->id = $deck;
+
+                return $card;
+            }else{
+                return 'false';
+            }
         }
 
     }
 
-    public function store(Request $request)
-    {
-        //
-    }
 
-    public function show($id)
-    {
-        //
-    }
 
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
 }

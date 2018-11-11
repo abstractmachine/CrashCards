@@ -13,12 +13,12 @@ class Deck extends Model
 
 	public function categories()
 	{
-		return $this->belongsToMany(Category::class)->withPivot('draw_count');
+		return $this->belongsToMany(Category::class)->withPivot('draw_count')->withTimestamps();
 	}
 
 	public function cards()
 	{
-		return $this->belongsToMany(Card::class)->withPivot('category_id');
+		return $this->belongsToMany(Card::class)->withPivot('id', 'category_id')->withTimestamps();
 	}
 
 	public function author()

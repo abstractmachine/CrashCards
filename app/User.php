@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     public function cards()
     {
-        return $this->hasMany(Card::class, 'author_id');
+        return $this->hasMany(Card::class, 'author_id')->withTimestamps();
     }
 
     public function teams()
@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function workshops()
     {
-        return $this->hasMany(Workshop::class, 'author_id');
+        return $this->hasMany(Workshop::class, 'author_id')->withTimestamps();
     }
 
     public function decks()

@@ -8,7 +8,7 @@ class Card extends Model
 {
     public function author()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'author_id')->withTimestamps();
     }
 
     public function hands()
@@ -18,6 +18,6 @@ class Card extends Model
     
     public function decks()
     {
-    	return $this->belongsToMany(Deck::class);
+    	return $this->belongsToMany(Deck::class)->withPivot('id', 'category_id')->withTimestamps();
     }
 }

@@ -10508,3 +10508,9 @@ a.text-dark:focus {
   cursor: pointer;
 }
 
+.deck-maker .smooth-dnd-container {
+  width: 30vw;
+  height: 300px;
+  border: solid 1px black;
+}
+

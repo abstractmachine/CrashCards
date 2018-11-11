@@ -16,3 +16,17 @@ $material-icons-font-path: '~material-icons/iconfont/';
 .clickable{
     cursor: pointer;
 }
+
+//     ____  _   ______
+//    / __ \/ | / / __ \
+//   / / / /  |/ / / / /
+//  / /_/ / /|  / /_/ /
+// /_____/_/ |_/_____/
+
+.deck-maker{
+	.smooth-dnd-container{
+	    width: 30vw;
+	    height: 300px;
+	    border: solid 1px black;
+	}
+}
