@@ -7,15 +7,16 @@
         <div class="row">
             <div class="col border-dark border">
                 
-                <h3>Decks</h3>
+                <h3>Workshops</h3>
                 
-                <deck-bag :decks="{{ $decks->toJson() }}"
-                            url-ajax="{{ route('decks-manager') }}" 
+                <workshops-register 
+                            :workshops="{{ $workshops->toJson() }}"
+                            url-ajax="{{ route('workshops-manager') }}" 
                             @if(Auth::check())
                                 :author="{{ Auth::user()->toJson() }}"
                             @endif
                             >                
-                </deck-bag>
+                </workshops-register>
 
             </div>
         </div>

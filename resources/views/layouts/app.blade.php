@@ -38,6 +38,9 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('workshops-manager') }}">Workshops</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('cards-manager') }}">Cards</a>
                         </li>
                         <li class="nav-item">

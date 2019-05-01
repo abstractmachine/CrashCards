@@ -15,17 +15,25 @@ Auth::routes();
 
 Route::get('/', 'WorkshopController@index')->name('home');
 
-Route::get('/cards', 'CardController@index')->name('cards-manager');
-Route::post('/cards/add', 'CardController@create')->name('add-card');
-Route::post('/cards/remove', 'CardController@destroy')->name('remove-card');
-Route::post('/cards/update', 'CardController@update')->name('update-card');
-
-Route::get('/decks', 'DeckController@index')->name('decks-manager');
-Route::get('/decks/add', 'DeckController@create')->name('add-deck');
-Route::post('/decks/remove', 'DeckController@destroy')->name('remove-deck');
-Route::post('/decks/update', 'DeckController@update')->name('update-deck');
-
 Route::middleware(['auth'])->group(function () {
+
+	Route::get('/workshops', 'WorkshopController@indexWorkshops')->name('workshops-manager');
+	Route::get('/workshops/add', 'WorkshopController@create')->name('add-workshop');
+	Route::post('/workshops/remove', 'WorkshopController@destroy')->name('remove-workshop');
+	Route::post('/workshops/update', 'WorkshopController@update')->name('update-workshop');
+
+	Route::get('/workshops/{workshop}', 'WorkshopController@indexWorkshop')->name('workshop-entry');
+	Route::post('/workshops/{workshop}/update', 'WorkshopController@updateWorkshop')->name('workshop-entry');
+
+	Route::get('/cards', 'CardController@index')->name('cards-manager');
+	Route::post('/cards/add', 'CardController@create')->name('add-card');
+	Route::post('/cards/remove', 'CardController@destroy')->name('remove-card');
+	Route::post('/cards/update', 'CardController@update')->name('update-card');
+
+	Route::get('/decks', 'DeckController@index')->name('decks-manager');
+	Route::get('/decks/add', 'DeckController@create')->name('add-deck');
+	Route::post('/decks/remove', 'DeckController@destroy')->name('remove-deck');
+	Route::post('/decks/update', 'DeckController@update')->name('update-deck');
 
 	Route::get('/decks/deck/{deck}', 'DeckController@indexDeck')->name('deck-manager');
 	Route::post('/decks/deck/{deck}/addcategory', 'DeckController@addCategory')->name('add-category');
@@ -36,6 +44,5 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::post('/categories/{category}/save/name', 'CategoryController@saveName')->name('save-name-category');
 	Route::post('/categories/{category}/delete', 'CategoryController@destroy')->name('delete-category');
-
 
 });

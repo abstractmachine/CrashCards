@@ -1,31 +1,42 @@
 <template>
-    <div class="row deck-maker">
-        <div class="col-4 border border-dark" v-for="(category, catKey) in allCategories" :key="catKey">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    
+                    <div class="input-group">
+                        <input type="text" class="form-control" v-model="deck.name" v-on:focusout="saveDeckName">
+                    </div>  
 
-            <button 
-                type="button" 
-                class="close" 
-                aria-label="Close" 
-                v-on:click="deleteCategory(category)" >
-              <span aria-hidden="true">&times;</span>
-            </button>
+                </div>
+            </div>
+            <div class="row deck-maker">
+                <div class="col-4 border border-dark" v-for="(category, catKey) in allCategories" :key="catKey">
+                    <button 
+                        type="button" 
+                        class="close" 
+                        aria-label="Close" 
+                        v-on:click="deleteCategory(category)" >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
 
-            <div class="input-group">
-                <h5>category</h5>
-                <span>{{category.id}}</span>
-                <input type="text" class="form-control" v-model="category.name" v-on:focusout="saveCategoryName(category)">
-            </div>  
-            <draggable-cards-container 
-            :base-url="urlAjax" 
-            :items='category.cards'
-            :category-id='category.id'></draggable-cards-container>
+                    <div class="input-group">
+                        <h5>category</h5>
+                        <input type="text" class="form-control" v-model="category.name" v-on:focusout="saveCategoryName(category)">
+                    </div>  
+                    <draggable-cards-container 
+                    :base-url="urlAjax" 
+                    :items='category.cards'
+                    :category-id='category.id'></draggable-cards-container>
 
+                </div>
+
+                <div class="col-2">
+                    <button class="btn btn-dark" @click="addCategory"> add category </button>
+                </div>
+
+            </div>
         </div>
-
-        <div class="col-2">
-            <button class="btn btn-dark" @click="addCategory"> add category </button>
-        </div>
-
     </div>
 </template>
 
@@ -74,7 +85,7 @@
             },
             addCategory: function(){
                 var vueApp = this;
-                
+
                 $.post(this.urlAjax + '/addcategory', {
                     '_token': $('meta[name=csrf-token]').attr('content'),
                     '_data': this.deck,
@@ -103,6 +114,23 @@
                         vueApp.allCategories.splice(index, 1);
                     }
                 }.bind(vueApp));
+            },
+            saveDeckName:function(){
+
+                // var vueApp = this;
+                // vueApp.toDelete = category;    
+
+                // $.post(this.baseUrl + '/categories/' + category.id + '/delete', {
+                //     '_token': $('meta[name=csrf-token]').attr('content'),
+                //     '_data': this.deck,
+                // },function(data){  
+                //     console.log('success')
+                //     if(data === 'true')
+                //     {
+                //         var index = vueApp.allCategories.indexOf(vueApp.toDelete);
+                //         vueApp.allCategories.splice(index, 1);
+                //     }
+                // }.bind(vueApp));
             }
 
         }
@@ -114,7 +142,7 @@
 <style scoped lang="scss">
 
     .card {
-      width: 150px; height: 300px;
+      width: 150px;
       position: relative;
 
         .category-name{

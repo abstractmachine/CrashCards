@@ -8,7 +8,7 @@ class Card extends Model
 {
     public function author()
     {
-        return $this->belongsTo(User::class, 'author_id')->withTimestamps();
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public function hands()

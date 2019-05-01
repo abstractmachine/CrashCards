@@ -62,6 +62,23 @@ class DeckController extends Controller
         }
     }
 
+    public function create(Request $request)
+    {
+        if(!Auth::check()){
+            back();
+        }
+
+        $user = Auth::user();
+
+        $deck = new Deck();
+        $deck->save();
+        $deck->author()->associate($user);
+        $deck->save();
+
+        return redirect()->route('deck-manager', compact('deck')); 
+
+    }
+
     //     ____            __
     //    / __ \___  _____/ /__
     //   / / / / _ \/ ___/ //_/
@@ -86,23 +103,6 @@ class DeckController extends Controller
         }
 
         return view('deck-manager', compact('deck', 'user', 'cards'));
-    }
-
-    public function create(Request $request)
-    {
-        if(!Auth::check()){
-            back();
-        }
-
-        $user = Auth::user();
-
-        $deck = new Deck();
-        $deck->save();
-        $deck->author()->associate($user);
-        $deck->save();
-
-        return redirect()->route('deck-manager', compact('deck')); 
-
     }
 
     public function addCategory(Request $request){
