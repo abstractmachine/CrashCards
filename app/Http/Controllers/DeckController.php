@@ -79,6 +79,27 @@ class DeckController extends Controller
 
     }
 
+    public function update(Request $request, Deck $deck){
+
+        if ($request->ajax() && isset($deck) && Auth::check()) {
+
+            $user = Auth::user();
+            // $deckUser = User::find($request->_data['author']['id']);
+
+            $request->validate([
+                '_data' => 'required'
+            ]);
+
+            $deck->name = $request->_data["name"];
+            $deck->save();
+
+            return 'true';
+        }
+
+        return 'false';
+
+    }
+
     //     ____            __
     //    / __ \___  _____/ /__
     //   / / / / _ \/ ___/ //_/
@@ -123,8 +144,6 @@ class DeckController extends Controller
                 $deck->categories()->save($category);
 
                 $category->cards = collect([]);
-
-                // $category->items = [];
 
                 return $category;
             }else{

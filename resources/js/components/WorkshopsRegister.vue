@@ -15,14 +15,14 @@
                         type="button" 
                         class="close" 
                         aria-label="Close" 
-                        v-on:click="deleteWorkshop(index)"
+                        v-on:click="deleteWorkshop(workshop.id, index)"
                         v-if="workshop.author.id == author.id" >
                       <span aria-hidden="true">&times;</span>
                     </button>
 
-                    <a :href="urlAjax + '/' + workshop.id " class="">
+                    <a :href="baseUrl + '/' + workshop.id " class="">
                         <h3 scope="row" >{{ workshop.id }} {{ workshop.name }}</h3>
-                        <td>{{ workshop.author.username}}</td>
+                        <td>{{ workshop.author.username }}</td>
                     </a>
 
                 </div>  
@@ -38,7 +38,8 @@
         props:{
             workshops: {
             }, 
-            urlAjax:{},
+            baseUrl: String,
+            removeUrl: String,
             author:{}
         },
         data: function () {
@@ -68,19 +69,22 @@
             //   return 0;
             // },
             createWorkshop: function(){
-                window.location = this.urlAjax + '/add';
+                window.location = this.baseUrl + '/add';
             },
-            deleteWorkshop: function(index){
+            deleteWorkshop: function(workshopId, index){
 
-                confirm("Sure to delete this workshop?"); 
+                // confirm("Sure to delete this workshop?"); 
 
                 var vueApp = this;
                 vueApp.toDelete = index;
 
-                $.post(this.urlAjax + '/remove', {
+                console.log('trying to delete');
+                console.log(this.baseUrl);
+
+                $.post(this.baseUrl + '/' + workshopId + '/remove', {
                     '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.allWorkshops[index],
                 },function(data){  
+                    console.log("data")
                     console.log(data)
 
                     if(data === 'true'){

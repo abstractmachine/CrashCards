@@ -1,10 +1,9 @@
 <template>
 
-    <Container @drop="onDrop" class="w-100 p-3" group-name="cards-container">  
-    
-        <p>{{typeof(arrayItems) }}</p>
-      <Draggable v-for='(item, key) in arrayItems' :key="key" class="border-dark border mb-3">
+    <Container @drop="onDrop" class="w-100 p-3 cards-container" group-name="cards-container">  
+        <p>Cartes:</p>
 
+        <Draggable v-for='(item, key) in arrayItems' :key="key" class="border-dark border mb-3">
 
         <div class="draggable-item p-2">
             <button 
@@ -142,6 +141,9 @@
             text-align: center;
         }
     }
-
+    
+    .cards-container{
+        overflow: scroll;
+    }
 
 </style>

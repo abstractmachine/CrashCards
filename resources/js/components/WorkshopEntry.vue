@@ -49,6 +49,7 @@
         methods:{
             updateWorkshop:function(){
                 var vueApp = this;
+                console.log('lo = ' + this.urlAjax + '/update');
 
                 $.post(this.urlAjax + '/update' , {
                     '_token': $('meta[name=csrf-token]').attr('content'),
@@ -59,6 +60,10 @@
                     {
                         console.log('success')
                     }
+                    else{
+                        console.log('failed')
+                    }
+
                 });
             },
         }

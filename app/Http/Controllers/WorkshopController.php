@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Deck;
+use App\User;
 use App\Workshop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,27 +17,25 @@ class WorkshopController extends Controller
     }
 
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, Workshop $workshop)
     {
-        if ($request->ajax()) {
-
-            $request->validate([
-                '_data.id' => 'required',
-                '_data.author' => 'required',
-            ]);
+        if ($request->ajax() && Auth::check()) {
 
             $user = Auth::user();
-            $deckUser = User::find($request->_data['author']['id']);
 
-            if($deckUser->id == $user->id){
+            // $deckUser = User::find($request->_data['author']['id']);
 
-                $deck = Deck::find($request->_data['id']);
-                $deck->delete();
+            if($workshop->author->id == $user->id){
+
+                $workshop->delete();
 
                 return 'true';
+
             }else{
                 return 'false';
             }
+        }else{
+                return 'false';
         }
     }
 
@@ -50,7 +49,6 @@ class WorkshopController extends Controller
         $workshop->save();
 
         return redirect()->route('workshop-entry', compact('workshop')); 
-
     }
 
 
@@ -80,10 +78,10 @@ class WorkshopController extends Controller
 
     public function updateWorkshop(Workshop $workshop, Request $request){
 
-        if ($request->ajax()) {
+        if ($request->ajax() && Auth::check()) {
 
             $request->validate([
-                '_data.id' => 'required|numeric',
+                '_data' => 'required',
             ]);
 
             $user = Auth::user();

@@ -10,11 +10,11 @@
 
                 </div>
             </div>
-            <div class="row deck-maker">
+            <div class="row deck-maker mt-3">
                 <div class="col-4 border border-dark" v-for="(category, catKey) in allCategories" :key="catKey">
                     <button 
                         type="button" 
-                        class="close" 
+                        class="close " 
                         aria-label="Close" 
                         v-on:click="deleteCategory(category)" >
                       <span aria-hidden="true">&times;</span>
@@ -24,15 +24,17 @@
                         <h5>category</h5>
                         <input type="text" class="form-control" v-model="category.name" v-on:focusout="saveCategoryName(category)">
                     </div>  
+
                     <draggable-cards-container 
                     :base-url="urlAjax" 
                     :items='category.cards'
-                    :category-id='category.id'></draggable-cards-container>
+                    :category-id='category.id'>
+                    </draggable-cards-container>
 
                 </div>
 
                 <div class="col-2">
-                    <button class="btn btn-dark" @click="addCategory"> add category </button>
+                    <button class="btn btn-dark mt-3" @click="addCategory"> add category </button>
                 </div>
 
             </div>
@@ -86,16 +88,18 @@
             addCategory: function(){
                 var vueApp = this;
 
-                $.post(this.urlAjax + '/addcategory', {
+                $.post(this.urlAjax + '/category/add', {
                     '_token': $('meta[name=csrf-token]').attr('content'),
                     '_data': this.deck,
                 },function(data)
                 {  
                     console.log('success')
+
                     if(data !== null)
                     {   
                         vueApp.allCategories.push(data);
                     }
+
                 }.bind(vueApp));
             },
             deleteCategory: function(category){
@@ -116,21 +120,20 @@
                 }.bind(vueApp));
             },
             saveDeckName:function(){
+                var vueApp = this; 
 
-                // var vueApp = this;
-                // vueApp.toDelete = category;    
-
-                // $.post(this.baseUrl + '/categories/' + category.id + '/delete', {
-                //     '_token': $('meta[name=csrf-token]').attr('content'),
-                //     '_data': this.deck,
-                // },function(data){  
-                //     console.log('success')
-                //     if(data === 'true')
-                //     {
-                //         var index = vueApp.allCategories.indexOf(vueApp.toDelete);
-                //         vueApp.allCategories.splice(index, 1);
-                //     }
-                // }.bind(vueApp));
+                $.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
+                    '_token': $('meta[name=csrf-token]').attr('content'),
+                    '_data': this.deck,
+                },function(data){  
+                    console.log('data')
+                    console.log(data)
+                    // if(data === 'true')
+                    // {
+                    //     var index = vueApp.allCategories.indexOf(vueApp.toDelete);
+                    //     vueApp.allCategories.splice(index, 1);
+                    // }
+                }.bind(vueApp));
             }
 
         }

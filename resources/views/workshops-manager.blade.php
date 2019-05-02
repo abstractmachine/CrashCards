@@ -11,7 +11,8 @@
                 
                 <workshops-register 
                             :workshops="{{ $workshops->toJson() }}"
-                            url-ajax="{{ route('workshops-manager') }}" 
+                            base-url="{{ route('workshops-manager') }}" 
+                            remove-url="{{ route('workshops-manager') }}" 
                             @if(Auth::check())
                                 :author="{{ Auth::user()->toJson() }}"
                             @endif

@@ -20,7 +20,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
 
-                    <a :href="urlAjax + '/deck/' + deck.id " class="">
+                    <a :href="urlAjax + '/' + deck.id " class="">
                         <h3 scope="row" >{{ deck.id }} {{ deck.name }}</h3>
                         <td>{{ deck.author.username}}</td>
                     </a>
