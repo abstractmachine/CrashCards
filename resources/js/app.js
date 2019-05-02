@@ -13,8 +13,10 @@ Vue.component('card-picker', require('./components/CardPicker.vue'));
 Vue.component('draggable-cards-container', require('./components/DraggableCardsContainer.vue'));
 Vue.component('workshops-register', require('./components/WorkshopsRegister.vue'));
 Vue.component('workshop-entry', require('./components/WorkshopEntry.vue'));
+Vue.component('user-editor', require('./components/UserEditor.vue'));
  
 Vue.use(VModal)
+
 Vue.use(VueSelect, {
   theme: 'bootstrap' // or 'material-design'
 })

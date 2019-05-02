@@ -14,6 +14,7 @@
 Auth::routes();
 
 Route::get('/', 'WorkshopController@index')->name('home');
+Route::get('/home', 'WorkshopController@index')->name('home');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -63,5 +64,14 @@ Route::middleware(['auth'])->group(function () {
 
 	Route::post('/categories/{category}/save/name', 'CategoryController@saveName')->name('save-name-category');
 	Route::post('/categories/{category}/delete', 'CategoryController@destroy')->name('delete-category');
+
+
+	//    __  __
+	//   / / / /_______  _____
+	//  / / / / ___/ _ \/ ___/
+	// / /_/ (__  )  __/ /
+	// \____/____/\___/_/
+	
+	Route::get('/user', 'UserController@index')->name('user');
 
 });

@@ -3,7 +3,7 @@
         <div class="col">
             <div class="row mb-3">
                 <div class="col">
-                  <button class="btn btn-dark" @click="createWorkshop"> Add deck </button>
+                  <button class="btn btn-dark" @click="createWorkshop"> Add Workshop </button>
                 </div>
 
             </div>

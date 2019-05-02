@@ -89,6 +89,7 @@ class WorkshopController extends Controller
             if($workshop->author->id == $user->id){
 
                 $workshop->name = $request->_data['name'];
+                $workshop->deck_id = $request->_data['deck_id'];
                 $workshop->save();
 
                 return 'true';
@@ -100,7 +101,8 @@ class WorkshopController extends Controller
 
 
     function getWorkshopState(){
-    	return Workshop::findOrFail(1)
+    	return Workshop::all()
+                        ->first()
         				->load('deck.categories', 'deck.cards');
     }
 }

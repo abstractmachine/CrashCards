@@ -14341,8 +14341,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('card-picker', __webpack_r
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('draggable-cards-container', __webpack_require__(72));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('workshops-register', __webpack_require__(77));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('workshop-entry', __webpack_require__(82));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('user-editor', __webpack_require__(96));
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_js_modal___default.a);
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_cool_select___default.a, {
     theme: 'bootstrap' // or 'material-design'
 });
@@ -50945,7 +50947,7 @@ var render = function() {
           _c(
             "button",
             { staticClass: "btn btn-dark", on: { click: _vm.createWorkshop } },
-            [_vm._v(" Add deck ")]
+            [_vm._v(" Add Workshop ")]
           )
         ])
       ]),
@@ -51137,6 +51139,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -51145,11 +51152,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['workshop', 'urlAjax', 'author', 'decks'],
     data: function data() {
         return {
-            allDecks: this.decks
+            allDecks: this.decks,
+            editMode: false,
+            deck: null
         };
     },
+    watch: {
+        deck: function deck(val) {
+            this.workshop.deck_id = this.deck;
+            this.updateWorkshop();
+        }
+    },
     computed: {},
-    mounted: function mounted() {},
+    mounted: function mounted() {
+        if (this.workshop.deck_id != null) {
+            this.deck = this.workshop.deck_id;
+        }
+    },
 
     methods: {
         updateWorkshop: function updateWorkshop() {
@@ -51166,6 +51185,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     console.log('failed');
                 }
             });
+        },
+        findDeck: function findDeck(deck) {
+            console.log(this.allDecks);
+            for (var i = 0; i < this.allDecks.length; i++) {
+                if (this.allDecks[i].id = deck) {
+                    return this.allDecks[i].name;
+                }
+            }
+            return 'no deck';
         }
     }
 });
@@ -51180,32 +51208,70 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col" }, [
+      _c("div", { staticClass: "button-edit-mode mt-3 mb-3" }, [
+        !_vm.editMode
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                on: {
+                  click: function($event) {
+                    _vm.editMode = true
+                  }
+                }
+              },
+              [_vm._v(" Edit ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editMode
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-info",
+                on: {
+                  click: function($event) {
+                    _vm.editMode = false
+                  }
+                }
+              },
+              [_vm._v(" Finish Editing ")]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col" }, [
-          _c("div", { staticClass: "input-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.workshop.name,
-                  expression: "workshop.name"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text" },
-              domProps: { value: _vm.workshop.name },
-              on: {
-                focusout: _vm.updateWorkshop,
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+          _vm.editMode
+            ? _c("div", { staticClass: "input-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.workshop.name,
+                      expression: "workshop.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.workshop.name },
+                  on: {
+                    focusout: _vm.updateWorkshop,
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.workshop, "name", $event.target.value)
+                    }
                   }
-                  _vm.$set(_vm.workshop, "name", $event.target.value)
-                }
-              }
-            })
-          ]),
+                })
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.editMode
+            ? _c("h2", [_vm._v(_vm._s(_vm.workshop.name))])
+            : _vm._e(),
           _vm._v(" "),
           _c("h5", [_vm._v(_vm._s(_vm.workshop.author.username))])
         ])
@@ -51214,26 +51280,44 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c(
           "div",
-          { staticClass: "col" },
+          {
+            staticClass: "col d-flex align-items-baseline justify-content-start"
+          },
           [
-            _c("h4", [_vm._v("Deck")]),
+            _c("h4", { staticClass: " mr-3" }, [_vm._v("Deck : ")]),
             _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.workshop.deck_id))]),
+            !_vm.editMode
+              ? _c("div", { staticClass: "deck-name" }, [
+                  _vm.workshop.deck_id > 0
+                    ? _c("p", [
+                        _vm._v(
+                          _vm._s(_vm.workshop.deck_id) +
+                            " " +
+                            _vm._s(_vm.findDeck(_vm.workshop.deck_id))
+                        )
+                      ])
+                    : _c("p", [
+                        _vm._v(" Passé en mode édit pour selectionner un deck.")
+                      ])
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _c("cool-select", {
-              attrs: {
-                items: _vm.allDecks,
-                "item-value": "id",
-                "item-text": "name"
-              },
-              model: {
-                value: _vm.workshop.deck_id,
-                callback: function($$v) {
-                  _vm.$set(_vm.workshop, "deck_id", $$v)
-                },
-                expression: "workshop.deck_id"
-              }
-            })
+            _vm.editMode
+              ? _c("cool-select", {
+                  attrs: {
+                    items: _vm.allDecks,
+                    "item-value": "id",
+                    "item-text": "name"
+                  },
+                  model: {
+                    value: _vm.deck,
+                    callback: function($$v) {
+                      _vm.deck = $$v
+                    },
+                    expression: "deck"
+                  }
+                })
+              : _vm._e()
           ],
           1
         )
@@ -51256,6 +51340,202 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(97)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(99)
+/* template */
+var __vue_template__ = __webpack_require__(100)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-5bd615c3"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/UserEditor.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5bd615c3", Component.options)
+  } else {
+    hotAPI.reload("data-v-5bd615c3", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(98);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("01777d62", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5bd615c3\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UserEditor.vue", function() {
+     var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-5bd615c3\",\"scoped\":true,\"hasInlineConfig\":true}!../../../node_modules/sass-loader/lib/loader.js!../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UserEditor.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.card[data-v-5bd615c3] {\n  width: 150px;\n  position: relative;\n}\n.card .category-name[data-v-5bd615c3] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {},
+    data: function data() {
+        return {};
+    },
+    computed: {},
+    mounted: function mounted() {},
+
+    methods: {}
+});
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col" }, [
+      _c("div", { staticClass: "button-edit-mode mt-3 mb-3" }, [
+        !_vm.editMode
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary",
+                on: {
+                  click: function($event) {
+                    _vm.editMode = true
+                  }
+                }
+              },
+              [_vm._v(" Edit ")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.editMode
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-info",
+                on: {
+                  click: function($event) {
+                    _vm.editMode = false
+                  }
+                }
+              },
+              [_vm._v(" Finish Editing ")]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm._m(0)
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row deck-maker mt-3" }, [
+      _c("h1", [_vm._v("user!")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5bd615c3", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);
