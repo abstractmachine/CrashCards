@@ -20,20 +20,15 @@ class WorkshopController extends Controller
     public function destroy(Request $request, Workshop $workshop)
     {
         if ($request->ajax() && Auth::check()) {
-
             $user = Auth::user();
 
-            // $deckUser = User::find($request->_data['author']['id']);
-
             if($workshop->author->id == $user->id){
-
                 $workshop->delete();
-
-                return 'true';
-
+                return $workshop->id;
             }else{
                 return 'false';
             }
+
         }else{
                 return 'false';
         }
@@ -78,7 +73,7 @@ class WorkshopController extends Controller
 
     public function updateWorkshop(Workshop $workshop, Request $request){
 
-        if ($request->ajax() && Auth::check()) {
+        if ($request->ajax()) {
 
             $request->validate([
                 '_data' => 'required',

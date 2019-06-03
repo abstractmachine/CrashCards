@@ -110,9 +110,10 @@ class DeckController extends Controller
         $user = null;
 
         $user = Auth::user();
-        if($deck->author->id != $user->id){
-            return redirect()->route('decks-manager'); 
-        }
+        
+        // if($deck->author->id != $user->id){
+        //     return redirect()->route('decks-manager'); 
+        // }
         
         $cards = Card::all()->load('decks');
 

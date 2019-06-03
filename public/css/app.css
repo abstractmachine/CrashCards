@@ -10514,3 +10514,18 @@ a.text-dark:focus {
   border: solid 1px black;
 }
 
+.page-title {
+  border-bottom: 5px solid black;
+}
+
+.form-group input {
+  border-radius: 3px;
+  border: 3px solid black;
+  padding: 0.3rem 0.6rem;
+}
+
+.input-group-text {
+  border: 1px dashed black;
+  background: unset !important;
+}
+

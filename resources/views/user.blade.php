@@ -7,7 +7,10 @@
         <div class="row">
 
             <div class="col border-dark border">
-                <user-editor :user="{{ $user }}"></user-editor>
+                <user-editor 
+                    :user="{{ $user }}"
+                    url-ajax="{{ route('update-user', ['user' => $user]) }}" >
+                </user-editor>
             </div>
         </div>
         

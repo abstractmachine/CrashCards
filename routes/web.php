@@ -73,5 +73,6 @@ Route::middleware(['auth'])->group(function () {
 	// \____/____/\___/_/
 	
 	Route::get('/user', 'UserController@index')->name('user');
+	Route::post('/users/{user}/update', 'UserController@update')->name('update-user');
 
 });

@@ -77,21 +77,25 @@
 
                 confirm("Sure to delete this deck?"); 
 
-                var vueApp = this;
-                vueApp.toDelete = index;
+                this.toDelete = index;
 
-                $.post(this.urlAjax + '/remove', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.allDecks[index],
-                },function(data){  
-                    console.log(data)
-
-                    if(data === 'true'){
-                        vueApp.allDecks.splice(vueApp.toDelete,1);
-                        console.log(vueApp)
+                axios.post(this.urlAjax + '/remove', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: this.allDecks[index],
+                })
+                .then(response => {
+                    console.log(response.data == true)
+                    console.log(response.data)
+                    if(response.data == true){
+                        console.log("prout");
+                        console.log(this.allDecks);
+                        this.allDecks.splice(index,1);
+                        console.log(this.allDecks);
                     }
-
-                }.bind(vueApp));
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             }
 
         }

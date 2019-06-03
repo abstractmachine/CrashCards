@@ -59,81 +59,87 @@
         data: function () {
             return {
                 allCategories: this.deck.categories,
-                // items: ['ok1', 'ok2', 'ok3']
             }
         },
         computed:{
         },
         mounted() {
-            // for (var i = 0; i < this.allCategories.length; i++) {
-            //     // this.allCategories[i]
-            // }
         },
         methods:{
             saveCategoryName:function(category){
                 var vueApp = this;
                 category.deck_id = this.deck.id;
-
-                $.post(this.baseUrl + '/categories/' + category.id + '/save/name' , {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': category,
-                },function(data)
-                {  
-                    if(data !== null)
-                    {
-                        category = data;
-                    }
-                }.bind(category));
+                console.log()
+                // axios.post(this.urlAjax + '/remove', {
+                //   _token: $('meta[name=csrf-token]').attr('content'),
+                //   _data: category,
+                // })
+                // .then(response => {
+                //     if(response.data == true){
+                //         this.allDecks.splice(index,1);
+                //     }
+                // })
+                // .catch(e => {
+                //   console.log(e)
+                // })
             },
             addCategory: function(){
-                var vueApp = this;
-
-                $.post(this.urlAjax + '/category/add', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.deck,
-                },function(data)
-                {  
+                axios.post(this.urlAjax + '/category/add', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: this.deck,
+                })
+                .then(response => {
                     console.log('success')
 
-                    if(data !== null)
+                    if(response.data !== null)
                     {   
-                        vueApp.allCategories.push(data);
+                        this.allCategories.push(response.data);
                     }
 
-                }.bind(vueApp));
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             },
             deleteCategory: function(category){
 
                 var vueApp = this;
                 vueApp.toDelete = category;    
 
-                $.post(this.baseUrl + '/categories/' + category.id + '/delete', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.deck,
-                },function(data){  
+                axios.post(this.baseUrl + '/categories/' + category.id + '/delete', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: this.deck,
+                })
+                .then(response => {
                     console.log('success')
-                    if(data === 'true')
+                    if(response.data == true)
                     {
-                        var index = vueApp.allCategories.indexOf(vueApp.toDelete);
-                        vueApp.allCategories.splice(index, 1);
+                        var index = this.allCategories.indexOf(this.toDelete);
+                        console.log(index);
+                        this.allCategories.splice(index, 1);
                     }
-                }.bind(vueApp));
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             },
             saveDeckName:function(){
                 var vueApp = this; 
 
-                $.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.deck,
-                },function(data){  
-                    console.log('data')
-                    console.log(data)
+                axios.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: this.deck,
+                })
+                .then(response => {
                     // if(data === 'true')
                     // {
                     //     var index = vueApp.allCategories.indexOf(vueApp.toDelete);
                     //     vueApp.allCategories.splice(index, 1);
                     // }
-                }.bind(vueApp));
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             }
 
         }

@@ -2,12 +2,22 @@
     <div class="row">
         <div class="col">
             <div class="row">
-                <div class="col mb-3">
+                <div class="col mb-3 d-flex justify-content-start">
                     <div class="form-group">
-                        
-                      <input type="text" v-model="search">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">🔍</span>
+                            </div>
+                            <input type="text" v-model="search">
+                        </div>
                     </div>
-                    <div class="form-group" v-if="author != null">
+
+                    <div class="form-group ml-3 w-25" v-if="author != null">
+                        <div class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                          <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+                        </div>
+                        
                         <input type="checkbox" v-model="onlyMe">
                         <p>Only Mine</p>
                     </div>
@@ -110,6 +120,9 @@
                 this.allCards[i].editMode = false;
                 this.cardsToUpdate.push(this.allCards[i]);
             }
+
+            console.log('author')
+            console.log(this.author)
         },
         methods:{
             cardToUpdate: function(card){
@@ -135,22 +148,26 @@
                 }
 
                 if(this.newCard.name != null && this.newCard.subtitle != null && this.newCard.author != null){
-                    $.post(this.urlAjax + '/add', {
-                        '_token': $('meta[name=csrf-token]').attr('content'),
-                        '_data': this.newCard,
-                    },function(data){  
-                        // console.log(data)
-                        if(data != 'null' || data != '0'){
 
-                          vueApp.newCard.id = data.id;
-                          vueApp.newCard.author = data.author;
-                          vueApp.newCard.editMode = false;
-                          vueApp.allCards.push(data);
-                          vueApp.cardsToUpdate.push(data);
-                          vueApp.newCard = {};
+                    axios.post(this.urlAjax + '/add', {
+                      _token: $('meta[name=csrf-token]').attr('content'),
+                      _data: this.newCard,
+                    })
+                    .then(response => {
+                        if(response.data != 'null' || response.data != '0'){
+
+                          this.newCard.id = response.data.id;
+                          this.newCard.author = response.data.author;
+                          this.newCard.editMode = false;
+                          this.allCards.push(response.data);
+                          this.cardsToUpdate.push(response.data);
+                          this.newCard = {};
 
                         }
-                    }.bind(vueApp));
+                    })
+                    .catch(e => {
+                      console.log(e)
+                    })
                 }
             },
             updateCard: function(card){
@@ -158,20 +175,23 @@
                 this.toUpdate = card;
 
                 if(this.toUpdate.name != null && this.toUpdate.subtitle != null && this.toUpdate.author != null){
-                    $.post(this.urlAjax + '/update', {
-                        '_token': $('meta[name=csrf-token]').attr('content'),
-                        '_data': this.toUpdate,
-                    },function(data){  
-                        // console.log(data)
-                        if(data != 'null' || data != '0' || data != 'false'){
-                            var card = vueApp.allCards[vueApp.allCards.indexOf(vueApp.toUpdate)];
-                            console.log(vueApp.toUpdate)
-                            card.name = data['name'];
-                            card.subtitle = data.subtitle;
-                            card.author = data.author;
+
+                    axios.post(this.urlAjax + '/update', {
+                      _token: $('meta[name=csrf-token]').attr('content'),
+                      _data: this.toUpdate,
+                    })
+                    .then(response => {
+                        if(response.data != 'null' || response.data != '0' || response.data != 'false'){
+                            var card = this.allCards[this.allCards.indexOf(this.toUpdate)];
+                            card.name = response.data['name'];
+                            card.subtitle = response.data.subtitle;
+                            card.author = response.data.author;
                             this.toggleEditMode(card);
                         }
-                    }.bind(vueApp));
+                    })
+                    .catch(e => {
+                      console.log(e)
+                    })
                 }
             },
             toggleEditMode:function(card){
@@ -186,18 +206,21 @@
                 var vueApp = this;
                 vueApp.toDelete = card;
 
-                $.post(this.urlAjax + '/remove', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': card,
-                },function(data){  
-                    console.log(data)
-                    if(data === 'true'){
-                        var index = vueApp.allCards.indexOf(vueApp.toDelete);
+                axios.post(this.urlAjax + '/remove', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: card,
+                })
+                .then(response => {
+                    if(response.data === 'true'){
+                        var index = this.allCards.indexOf(this.toDelete);
                         console.log('index = ' + index)
-                        vueApp.allCards.splice(index,1);
-                        vueApp.cardsToUpdate.splice(index,1);
+                        this.allCards.splice(index,1);
+                        this.cardsToUpdate.splice(index,1);
                     }
-                }.bind(vueApp));
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             }
 
         }
@@ -207,20 +230,5 @@
 
 
 <style scoped lang="scss">
-
-    .card {
-      width: 150px; height: 300px;
-      position: relative;
-
-        .category-name{
-            color: black;
-            position: absolute;
-            bottom: -40px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-        }
-    }
-
 
 </style>

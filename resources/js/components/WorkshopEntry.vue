@@ -65,25 +65,26 @@
         methods:{
             updateWorkshop:function(){
                 var vueApp = this;
-                console.log('lo = ' + this.urlAjax + '/update');
 
-                $.post(this.urlAjax + '/update' , {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.workshop,
-                },function(data)
-                {  
-                    if(data == 'true')
+                axios.post(this.urlAjax + '/update', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: this.workshop,
+                })
+                .then(response => {
+                    console.log
+                    if(response.data == 'true')
                     {
                         console.log('success')
                     }
                     else{
                         console.log('failed')
                     }
-
-                });
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             },
             findDeck: function(deck){
-                console.log(this.allDecks);
                 for (var i = 0; i < this.allDecks.length; i++) {
                     if(this.allDecks[i].id = deck){
                         return this.allDecks[i].name;

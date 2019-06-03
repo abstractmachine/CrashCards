@@ -14,7 +14,7 @@
                             base-url="{{ route('workshops-manager') }}" 
                             remove-url="{{ route('workshops-manager') }}" 
                             @if(Auth::check())
-                                :author="{{ Auth::user()->toJson() }}"
+                                :user="{{ Auth::user()->toJson() }}"
                             @endif
                             >                
                 </workshops-register>

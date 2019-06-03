@@ -14311,7 +14311,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
-module.exports = __webpack_require__(87);
+module.exports = __webpack_require__(92);
 
 
 /***/ }),
@@ -14341,7 +14341,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('card-picker', __webpack_r
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('draggable-cards-container', __webpack_require__(72));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('workshops-register', __webpack_require__(77));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('workshop-entry', __webpack_require__(82));
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('user-editor', __webpack_require__(96));
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('user-editor', __webpack_require__(87));
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_js_modal___default.a);
 
@@ -48992,7 +48992,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card[data-v-102965c3] {\n  width: 150px;\n  height: 300px;\n  position: relative;\n}\n.card .category-name[data-v-102965c3] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 
@@ -49003,6 +49003,16 @@ exports.push([module.i, "\n.card[data-v-102965c3] {\n  width: 150px;\n  height: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -49113,6 +49123,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.allCards[i].editMode = false;
             this.cardsToUpdate.push(this.allCards[i]);
         }
+
+        console.log('author');
+        console.log(this.author);
     },
 
     methods: {
@@ -49130,6 +49143,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return 0;
         },
         addNewCard: function addNewCard() {
+            var _this2 = this;
+
             var vueApp = this;
 
             if (this.author != null) {
@@ -49137,42 +49152,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             if (this.newCard.name != null && this.newCard.subtitle != null && this.newCard.author != null) {
-                $.post(this.urlAjax + '/add', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.newCard
-                }, function (data) {
-                    // console.log(data)
-                    if (data != 'null' || data != '0') {
 
-                        vueApp.newCard.id = data.id;
-                        vueApp.newCard.author = data.author;
-                        vueApp.newCard.editMode = false;
-                        vueApp.allCards.push(data);
-                        vueApp.cardsToUpdate.push(data);
-                        vueApp.newCard = {};
+                axios.post(this.urlAjax + '/add', {
+                    _token: $('meta[name=csrf-token]').attr('content'),
+                    _data: this.newCard
+                }).then(function (response) {
+                    if (response.data != 'null' || response.data != '0') {
+
+                        _this2.newCard.id = response.data.id;
+                        _this2.newCard.author = response.data.author;
+                        _this2.newCard.editMode = false;
+                        _this2.allCards.push(response.data);
+                        _this2.cardsToUpdate.push(response.data);
+                        _this2.newCard = {};
                     }
-                }.bind(vueApp));
+                }).catch(function (e) {
+                    console.log(e);
+                });
             }
         },
         updateCard: function updateCard(card) {
+            var _this3 = this;
+
             var vueApp = this;
             this.toUpdate = card;
 
             if (this.toUpdate.name != null && this.toUpdate.subtitle != null && this.toUpdate.author != null) {
-                $.post(this.urlAjax + '/update', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                    '_data': this.toUpdate
-                }, function (data) {
-                    // console.log(data)
-                    if (data != 'null' || data != '0' || data != 'false') {
-                        var card = vueApp.allCards[vueApp.allCards.indexOf(vueApp.toUpdate)];
-                        console.log(vueApp.toUpdate);
-                        card.name = data['name'];
-                        card.subtitle = data.subtitle;
-                        card.author = data.author;
-                        this.toggleEditMode(card);
+
+                axios.post(this.urlAjax + '/update', {
+                    _token: $('meta[name=csrf-token]').attr('content'),
+                    _data: this.toUpdate
+                }).then(function (response) {
+                    if (response.data != 'null' || response.data != '0' || response.data != 'false') {
+                        var card = _this3.allCards[_this3.allCards.indexOf(_this3.toUpdate)];
+                        card.name = response.data['name'];
+                        card.subtitle = response.data.subtitle;
+                        card.author = response.data.author;
+                        _this3.toggleEditMode(card);
                     }
-                }.bind(vueApp));
+                }).catch(function (e) {
+                    console.log(e);
+                });
             }
         },
         toggleEditMode: function toggleEditMode(card) {
@@ -49182,22 +49202,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             card.editMode = !card.editMode;
         },
         deleteCard: function deleteCard(card) {
+            var _this4 = this;
 
             var vueApp = this;
             vueApp.toDelete = card;
 
-            $.post(this.urlAjax + '/remove', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': card
-            }, function (data) {
-                console.log(data);
-                if (data === 'true') {
-                    var index = vueApp.allCards.indexOf(vueApp.toDelete);
+            axios.post(this.urlAjax + '/remove', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: card
+            }).then(function (response) {
+                if (response.data === 'true') {
+                    var index = _this4.allCards.indexOf(_this4.toDelete);
                     console.log('index = ' + index);
-                    vueApp.allCards.splice(index, 1);
-                    vueApp.cardsToUpdate.splice(index, 1);
+                    _this4.allCards.splice(index, 1);
+                    _this4.cardsToUpdate.splice(index, 1);
                 }
-            }.bind(vueApp));
+            }).catch(function (e) {
+                console.log(e);
+            });
         }
 
     }
@@ -49214,32 +49236,38 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col mb-3" }, [
+        _c("div", { staticClass: "col mb-3 d-flex justify-content-start" }, [
           _c("div", { staticClass: "form-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.search,
-                  expression: "search"
-                }
-              ],
-              attrs: { type: "text" },
-              domProps: { value: _vm.search },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+            _c("div", { staticClass: "input-group mb-3" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.search,
+                    expression: "search"
                   }
-                  _vm.search = $event.target.value
+                ],
+                attrs: { type: "text" },
+                domProps: { value: _vm.search },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.search = $event.target.value
+                  }
                 }
-              }
-            })
+              })
+            ])
           ]),
           _vm._v(" "),
           _vm.author != null
-            ? _c("div", { staticClass: "form-group" }, [
+            ? _c("div", { staticClass: "form-group ml-3 w-25" }, [
+                _vm._m(1),
+                _vm._v(" "),
                 _c("input", {
                   directives: [
                     {
@@ -49583,7 +49611,40 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text", attrs: { id: "basic-addon1" } },
+        [_vm._v("🔍")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "custom-control custom-switch" }, [
+      _c("input", {
+        staticClass: "custom-control-input",
+        attrs: { type: "checkbox", id: "customSwitch1" }
+      }),
+      _vm._v(" "),
+      _c(
+        "label",
+        {
+          staticClass: "custom-control-label",
+          attrs: { for: "customSwitch1" }
+        },
+        [_vm._v("Toggle this switch element")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -49762,23 +49823,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             window.location = this.urlAjax + '/add';
         },
         deleteDeck: function deleteDeck(index) {
+            var _this = this;
 
             confirm("Sure to delete this deck?");
 
-            var vueApp = this;
-            vueApp.toDelete = index;
+            this.toDelete = index;
 
-            $.post(this.urlAjax + '/remove', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': this.allDecks[index]
-            }, function (data) {
-                console.log(data);
-
-                if (data === 'true') {
-                    vueApp.allDecks.splice(vueApp.toDelete, 1);
-                    console.log(vueApp);
+            axios.post(this.urlAjax + '/remove', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: this.allDecks[index]
+            }).then(function (response) {
+                console.log(response.data == true);
+                console.log(response.data);
+                if (response.data == true) {
+                    console.log("prout");
+                    console.log(_this.allDecks);
+                    _this.allDecks.splice(index, 1);
+                    console.log(_this.allDecks);
                 }
-            }.bind(vueApp));
+            }).catch(function (e) {
+                console.log(e);
+            });
         }
 
     }
@@ -50027,75 +50092,80 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             allCategories: this.deck.categories
-            // items: ['ok1', 'ok2', 'ok3']
         };
     },
     computed: {},
-    mounted: function mounted() {
-        // for (var i = 0; i < this.allCategories.length; i++) {
-        //     // this.allCategories[i]
-        // }
-    },
+    mounted: function mounted() {},
 
     methods: {
         saveCategoryName: function saveCategoryName(category) {
             var vueApp = this;
             category.deck_id = this.deck.id;
-
-            $.post(this.baseUrl + '/categories/' + category.id + '/save/name', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': category
-            }, function (data) {
-                if (data !== null) {
-                    category = data;
-                }
-            }.bind(category));
+            console.log();
+            // axios.post(this.urlAjax + '/remove', {
+            //   _token: $('meta[name=csrf-token]').attr('content'),
+            //   _data: category,
+            // })
+            // .then(response => {
+            //     if(response.data == true){
+            //         this.allDecks.splice(index,1);
+            //     }
+            // })
+            // .catch(e => {
+            //   console.log(e)
+            // })
         },
         addCategory: function addCategory() {
-            var vueApp = this;
+            var _this = this;
 
-            $.post(this.urlAjax + '/category/add', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': this.deck
-            }, function (data) {
+            axios.post(this.urlAjax + '/category/add', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: this.deck
+            }).then(function (response) {
                 console.log('success');
 
-                if (data !== null) {
-                    vueApp.allCategories.push(data);
+                if (response.data !== null) {
+                    _this.allCategories.push(response.data);
                 }
-            }.bind(vueApp));
+            }).catch(function (e) {
+                console.log(e);
+            });
         },
         deleteCategory: function deleteCategory(category) {
+            var _this2 = this;
 
             var vueApp = this;
             vueApp.toDelete = category;
 
-            $.post(this.baseUrl + '/categories/' + category.id + '/delete', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': this.deck
-            }, function (data) {
+            axios.post(this.baseUrl + '/categories/' + category.id + '/delete', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: this.deck
+            }).then(function (response) {
                 console.log('success');
-                if (data === 'true') {
-                    var index = vueApp.allCategories.indexOf(vueApp.toDelete);
-                    vueApp.allCategories.splice(index, 1);
+                if (response.data == true) {
+                    var index = _this2.allCategories.indexOf(_this2.toDelete);
+                    console.log(index);
+                    _this2.allCategories.splice(index, 1);
                 }
-            }.bind(vueApp));
+            }).catch(function (e) {
+                console.log(e);
+            });
         },
         saveDeckName: function saveDeckName() {
             var vueApp = this;
 
-            $.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': this.deck
-            }, function (data) {
-                console.log('data');
-                console.log(data);
+            axios.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: this.deck
+            }).then(function (response) {
                 // if(data === 'true')
                 // {
                 //     var index = vueApp.allCategories.indexOf(vueApp.toDelete);
                 //     vueApp.allCategories.splice(index, 1);
                 // }
-            }.bind(vueApp));
+            }).catch(function (e) {
+                console.log(e);
+            });
         }
 
     }
@@ -50869,14 +50939,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
-        workshops: {},
+        workshops: Array,
         baseUrl: String,
         removeUrl: String,
-        author: {}
+        user: Object
     },
     data: function data() {
         return {
@@ -50887,46 +50985,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             newDeck: {}
         };
     },
-    computed: {},
+    computed: {
+        userWorkshop: function userWorkshop() {
+            var selectedWorkshops = [];
+            for (var i = 0; i < this.allWorkshops.length; i++) {
+                if (this.user.id == this.allWorkshops[i].author.id) {
+                    selectedWorkshops.push(this.allWorkshops[i]);
+                }
+            }
+            return selectedWorkshops;
+        }
+    },
     mounted: function mounted() {},
 
     methods: {
-        // orderBy: function(target){
-        //     this.compareOrder = !this.compareOrder;     
-        //     this.toCompare = target;
-        //     this.allWorkshops.sort(this.compare);
-        // },
-        // compare: function(a,b) {
-        //   if (a[this.toCompare] < b[this.toCompare])
-        //     return this.compareOrder ? -1 : 1;
-        //   if (a[this.toCompare] > b[this.toCompare])
-        //     return this.compareOrder ? 1 : -1;
-        //   return 0;
-        // },
         createWorkshop: function createWorkshop() {
             window.location = this.baseUrl + '/add';
         },
         deleteWorkshop: function deleteWorkshop(workshopId, index) {
+            var _this = this;
 
-            // confirm("Sure to delete this workshop?"); 
+            confirm("Sure to delete this workshop?");
 
             var vueApp = this;
-            vueApp.toDelete = index;
 
-            console.log('trying to delete');
-            console.log(this.baseUrl);
-
-            $.post(this.baseUrl + '/' + workshopId + '/remove', {
-                '_token': $('meta[name=csrf-token]').attr('content')
-            }, function (data) {
-                console.log("data");
-                console.log(data);
-
-                if (data === 'true') {
-                    vueApp.allWorkshops.splice(vueApp.toDelete, 1);
-                    console.log(vueApp);
+            axios.post(this.baseUrl + '/' + workshopId + '/remove', {
+                _token: $('meta[name=csrf-token]').attr('content')
+            }).then(function (response) {
+                console.log(response.data);
+                if (response.data != 'false') {
+                    _this.allWorkshops.splice(_this.getIndexWorkshop(response.data), 1);
                 }
-            }.bind(vueApp));
+            }).catch(function (e) {
+                console.log(e);
+            });
+        },
+        getIndexWorkshop: function getIndexWorkshop(id) {
+            var index = -1;
+
+            for (var i = 0; i < this.allWorkshops.length; i++) {
+                if (this.allWorkshops[i].id == id) {
+                    index = i;
+                }
+            }
+            return index;
         }
 
     }
@@ -50952,52 +51054,117 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row" },
+        [
+          _vm._l(_vm.userWorkshop, function(workshop, index) {
+            return _c(
+              "div",
+              {
+                key: workshop.id,
+                staticClass: "p-3 w-100 border col-3 workshop border-light "
+              },
+              [
+                workshop.author.id == _vm.user.id
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "close",
+                        attrs: { type: "button", "aria-label": "Close" },
+                        on: {
+                          click: function($event) {
+                            _vm.deleteWorkshop(workshop.id, index)
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { attrs: { "aria-hidden": "true" } }, [
+                          _vm._v("×")
+                        ])
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("a", { attrs: { href: _vm.baseUrl + "/" + workshop.id } }, [
+                  _c("h3", { attrs: { scope: "row" } }, [
+                    _vm._v(_vm._s(workshop.id) + " " + _vm._s(workshop.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(workshop.author.username))])
+                ])
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _vm.userWorkshop.lenght == 0
+            ? _c("div", { staticClass: "col" }, [
+                _c("p", [_vm._v("Aucun workshop")])
+              ])
+            : _vm._e()
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "row" },
         _vm._l(_vm.allWorkshops, function(workshop, index) {
-          return _c(
-            "div",
-            {
-              key: workshop.id,
-              staticClass: "p-3 w-100 border col-3 workshop border-light "
-            },
-            [
-              workshop.author.id == _vm.author.id
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "close",
-                      attrs: { type: "button", "aria-label": "Close" },
-                      on: {
-                        click: function($event) {
-                          _vm.deleteWorkshop(workshop.id, index)
-                        }
-                      }
-                    },
+          return workshop.author.id != _vm.user.id
+            ? _c(
+                "div",
+                {
+                  key: workshop.id,
+                  staticClass: "p-3 w-100 border col-3 workshop border-light "
+                },
+                [
+                  _c(
+                    "a",
+                    { attrs: { href: _vm.baseUrl + "/" + workshop.id } },
                     [
-                      _c("span", { attrs: { "aria-hidden": "true" } }, [
-                        _vm._v("×")
-                      ])
+                      _c("h3", { attrs: { scope: "row" } }, [
+                        _vm._v(
+                          _vm._s(workshop.id) + " " + _vm._s(workshop.name)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(workshop.author.username))])
                     ]
                   )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("a", { attrs: { href: _vm.baseUrl + "/" + workshop.id } }, [
-                _c("h3", { attrs: { scope: "row" } }, [
-                  _vm._v(_vm._s(workshop.id) + " " + _vm._s(workshop.name))
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(workshop.author.username))])
-              ])
-            ]
-          )
+                ]
+              )
+            : _vm._e()
         })
       )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [_c("h2", [_vm._v("Mes workshops:")])])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("hr"),
+        _vm._v(" "),
+        _c("h2", [_vm._v("Tout les workshops:")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -51173,21 +51340,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         updateWorkshop: function updateWorkshop() {
             var vueApp = this;
-            console.log('lo = ' + this.urlAjax + '/update');
 
-            $.post(this.urlAjax + '/update', {
-                '_token': $('meta[name=csrf-token]').attr('content'),
-                '_data': this.workshop
-            }, function (data) {
-                if (data == 'true') {
+            axios.post(this.urlAjax + '/update', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: this.workshop
+            }).then(function (response) {
+                console.log;
+                if (response.data == 'true') {
                     console.log('success');
                 } else {
                     console.log('failed');
                 }
+            }).catch(function (e) {
+                console.log(e);
             });
         },
         findDeck: function findDeck(deck) {
-            console.log(this.allDecks);
             for (var i = 0; i < this.allDecks.length; i++) {
                 if (this.allDecks[i].id = deck) {
                     return this.allDecks[i].name;
@@ -51337,32 +51505,18 @@ if (false) {
 
 /***/ }),
 /* 87 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(97)
+  __webpack_require__(88)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
-var __vue_script__ = __webpack_require__(99)
+var __vue_script__ = __webpack_require__(90)
 /* template */
-var __vue_template__ = __webpack_require__(100)
+var __vue_template__ = __webpack_require__(91)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -51401,13 +51555,13 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 97 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(98);
+var content = __webpack_require__(89);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -51427,7 +51581,7 @@ if(false) {
 }
 
 /***/ }),
-/* 98 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -51441,7 +51595,7 @@ exports.push([module.i, "\n.card[data-v-5bd615c3] {\n  width: 150px;\n  position
 
 
 /***/ }),
-/* 99 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51460,20 +51614,57 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: {},
+    props: {
+        user: {
+            type: Object
+        },
+        urlAjax: {
+            type: String
+        }
+    },
     data: function data() {
-        return {};
+        return {
+            editMode: false,
+            modifiedUser: this.user
+        };
     },
     computed: {},
-    mounted: function mounted() {},
+    mounted: function mounted() {
+        // this.modifiedUser = this.user;
+    },
 
-    methods: {}
+    methods: {
+        updateUser: function updateUser() {
+            var _this = this;
+
+            axios.post(this.urlAjax, {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: this.modifiedUser
+            }).then(function (response) {
+                _this.modifiedUser = response.data;
+            }).catch(function (e) {
+                console.log(e);
+            });
+        }
+    }
 });
 
 /***/ }),
-/* 100 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -51481,7 +51672,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col" }, [
+    _c("div", { staticClass: "col pb-3" }, [
       _c("div", { staticClass: "button-edit-mode mt-3 mb-3" }, [
         !_vm.editMode
           ? _c(
@@ -51514,20 +51705,85 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _c("div", { staticClass: "row deck-maker mt-3" }, [
+        _c("div", { staticClass: "col" }, [
+          _c("h1", [_vm._v("user!")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "d-flex align-items-baseline" }, [
+            _c("h3", { staticClass: "mr-3" }, [_vm._v("Name: ")]),
+            _vm._v(" "),
+            _vm.editMode
+              ? _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.modifiedUser.name,
+                      expression: "modifiedUser.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.modifiedUser.name },
+                  on: {
+                    focusout: _vm.updateUser,
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.modifiedUser, "name", $event.target.value)
+                    }
+                  }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.editMode
+              ? _c("h3", [_vm._v(_vm._s(_vm.modifiedUser.name))])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "d-flex align-items-baseline" }, [
+            _c("h3", { staticClass: "mr-3" }, [_vm._v("Username: ")]),
+            _vm._v(" "),
+            _vm.editMode
+              ? _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.modifiedUser.username,
+                      expression: "modifiedUser.username"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.modifiedUser.username },
+                  on: {
+                    focusout: _vm.updateUser,
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.modifiedUser,
+                        "username",
+                        $event.target.value
+                      )
+                    }
+                  }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.editMode
+              ? _c("h3", [_vm._v(_vm._s(_vm.modifiedUser.username))])
+              : _vm._e()
+          ])
+        ])
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row deck-maker mt-3" }, [
-      _c("h1", [_vm._v("user!")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -51536,6 +51792,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-5bd615c3", module.exports)
   }
 }
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

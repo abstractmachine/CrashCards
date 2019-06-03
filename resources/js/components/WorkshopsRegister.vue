@@ -8,18 +8,46 @@
 
             </div>
 
+            
             <div class="row">
-                <div v-for="(workshop, index) in allWorkshops"  :key="workshop.id" class="p-3 w-100 border col-3 workshop border-light ">
+                <div class="col">
+                    <h2>Mes workshops:</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div v-for="(workshop, index) in userWorkshop"  :key="workshop.id" class="p-3 w-100 border col-3 workshop border-light ">
             
                     <button 
                         type="button" 
                         class="close" 
                         aria-label="Close" 
                         v-on:click="deleteWorkshop(workshop.id, index)"
-                        v-if="workshop.author.id == author.id" >
+                        v-if="workshop.author.id == user.id" >
                       <span aria-hidden="true">&times;</span>
                     </button>
 
+                    <a :href="baseUrl + '/' + workshop.id " class="">
+                        <h3 scope="row" >{{ workshop.id }} {{ workshop.name }}</h3>
+                        <td>{{ workshop.author.username }}</td>
+                    </a>
+
+                </div>  
+
+                <div class="col" v-if="userWorkshop.lenght == 0">
+                    <p>Aucun workshop</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <hr>
+                    <h2>Tout les workshops:</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div v-for="(workshop, index) in allWorkshops"  :key="workshop.id" v-if="workshop.author.id != user.id" class="p-3 w-100 border col-3 workshop border-light ">
                     <a :href="baseUrl + '/' + workshop.id " class="">
                         <h3 scope="row" >{{ workshop.id }} {{ workshop.name }}</h3>
                         <td>{{ workshop.author.username }}</td>
@@ -36,11 +64,10 @@
 
     export default {
         props:{
-            workshops: {
-            }, 
+            workshops: Array, 
             baseUrl: String,
             removeUrl: String,
-            author:{}
+            user: Object
         },
         data: function () {
             return {
@@ -52,47 +79,50 @@
             }
         },
         computed:{
+            userWorkshop: function(){
+                var selectedWorkshops = [];
+                for (var i = 0; i < this.allWorkshops.length; i++) {
+                    if(this.user.id == this.allWorkshops[i].author.id){
+                        selectedWorkshops.push(this.allWorkshops[i]);
+                    }
+                }
+                return selectedWorkshops;
+            }
         },
         mounted() {
         },
         methods:{
-            // orderBy: function(target){
-            //     this.compareOrder = !this.compareOrder;     
-            //     this.toCompare = target;
-            //     this.allWorkshops.sort(this.compare);
-            // },
-            // compare: function(a,b) {
-            //   if (a[this.toCompare] < b[this.toCompare])
-            //     return this.compareOrder ? -1 : 1;
-            //   if (a[this.toCompare] > b[this.toCompare])
-            //     return this.compareOrder ? 1 : -1;
-            //   return 0;
-            // },
             createWorkshop: function(){
                 window.location = this.baseUrl + '/add';
             },
             deleteWorkshop: function(workshopId, index){
 
-                // confirm("Sure to delete this workshop?"); 
+                confirm("Sure to delete this workshop?"); 
 
                 var vueApp = this;
-                vueApp.toDelete = index;
 
-                console.log('trying to delete');
-                console.log(this.baseUrl);
-
-                $.post(this.baseUrl + '/' + workshopId + '/remove', {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
-                },function(data){  
-                    console.log("data")
-                    console.log(data)
-
-                    if(data === 'true'){
-                        vueApp.allWorkshops.splice(vueApp.toDelete,1);
-                        console.log(vueApp)
+                axios.post(this.baseUrl + '/' + workshopId + '/remove', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                })
+                .then(response => {
+                    console.log(response.data);
+                    if(response.data != 'false'){
+                        this.allWorkshops.splice(this.getIndexWorkshop(response.data),1);
                     }
+                })
+                .catch(e => {
+                  console.log(e)
+                })
+            },
+            getIndexWorkshop: function(id){
+                let index = -1;
 
-                }.bind(vueApp));
+                for (var i = 0; i < this.allWorkshops.length; i++) {
+                    if(this.allWorkshops[i].id == id){
+                        index = i;
+                    }
+                }
+                return index;
             }
 
         }
