@@ -1,27 +1,23 @@
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/bootstrap';
 
-$material-icons-font-path: '~material-icons/iconfont/';
-@import '~material-icons/iconfont/material-icons.scss';
 
-@import 'variables';
+// $material-icons-font-path: '~material-icons/iconfont/';
+// @import '~material-icons/iconfont/material-icons.scss';
+
 @import 'fonts';
-
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
-.clickable{
-    cursor: pointer;
-}
+@import 'variables';
+@import 'nav';
 
 //     ____  _   ______
 //    / __ \/ | / / __ \
 //   / / / /  |/ / / / /
 //  / /_/ / /|  / /_/ /
 // /_____/_/ |_/_____/
+html{
+	font-family: "Vollkorn", sans-serif;
+}
 
 .deck-maker{
 	.smooth-dnd-container{
