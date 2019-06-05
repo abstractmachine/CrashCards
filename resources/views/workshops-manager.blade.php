@@ -1,3 +1,5 @@
+@section('title', 'Workshops Manager')
+
 @extends('layouts.app')
 
 @section('content')

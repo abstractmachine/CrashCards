@@ -1,9 +1,18 @@
 <nav id="main-nav">
+    <div class="nav-header">
+        <a class="logo-container" href="{{ url('/') }}">
+            <span id="logo">🃏</span>
+            <span class="text">Crash Card Club</span>
+        </a>
 
-    <a class="logo-container" href="{{ url('/') }}">
-        <span id="logo">🃏</span>
-        <span class="text">Crash Card Club</span>
-    </a>
+        @if(Route::currentRouteName() != "home")
+            <div class="page-name" id="{{ Route::currentRouteName() }}-nav-header">
+                <span class="title">@yield('title')</span>
+                <div class="card"></div>
+            </div>
+        @endif
+
+    </div>
 
     <div class="nav-container">
         <ul>
@@ -41,6 +50,12 @@
                 </li>
             @else
 
+                <li class="nav-elem" id="user-nav">
+                    <a href="{{ route('user') }}">
+                        <div class="card"></div>
+                        <span class="title">Profile</span>
+                    </a>
+                </li>
                 <li class="nav-elem" id="logout-nav">
                     <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
@@ -53,12 +68,6 @@
                     @csrf
                 </form>
 
-                <li class="nav-elem" id="user-nav">
-                    <a href="{{ route('user') }}">
-                        <div class="card"></div>
-                        <span class="title">Profile</span>
-                    </a>
-                </li>
 
             @endguest
         </ul>

@@ -43,6 +43,18 @@ p {
   font-size: 1.2rem;
 }
 
+#main-nav .nav-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 #main-nav .logo-container {
   text-decoration: none;
   color: black;
@@ -54,6 +66,53 @@ p {
 
 #main-nav .logo-container #logo {
   font-size: 3rem;
+}
+
+#main-nav .page-name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#main-nav .page-name .card {
+  position: relative;
+  width: 15px;
+  height: 25px;
+  background-color: red;
+  border: solid 3px black;
+  border-radius: 5px;
+}
+
+#main-nav .page-name .title {
+  margin-right: 0.4rem;
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  font-family: "OpenSans", sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+#main-nav #Workshops-manager-nav-header .card {
+  background-color: red;
+  border: solid 5px #572020;
+}
+
+#main-nav #decks-manager-nav-header .card {
+  background-color: #FFF06C;
+  border: solid 5px #BBB36E;
+}
+
+#main-nav #cards-manager-nav-header .card {
+  background-color: #73BCFF;
+  border: solid 5px #D2E2F0;
+}
+
+#main-nav #login-nav-header .card {
+  background-color: #07EA1E;
+  border: solid 5px #5D8A62;
 }
 
 #main-nav ul {

@@ -1,3 +1,5 @@
+@section('title', 'Decks Manager')
+
 @extends('layouts.app')
 
 @section('content')

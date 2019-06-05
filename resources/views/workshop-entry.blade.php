@@ -1,3 +1,5 @@
+@section('title', 'Workshop - ' . $workshop->name)
+
 @extends('layouts.app')
 
 @section('content')

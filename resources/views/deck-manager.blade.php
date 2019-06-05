@@ -1,3 +1,5 @@
+@section('title', 'Deck - ' . $deck->name)
+
 @extends('layouts.app')
 
 @section('content')

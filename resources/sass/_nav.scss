@@ -5,6 +5,11 @@
 // /_/ |_/_/  |_|___/
 
 #main-nav{
+	.nav-header{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 	.logo-container{
 		text-decoration: none;
 		color: black;
@@ -16,6 +21,54 @@
 			font-size: 3rem;
 		} 
 	}
+
+	.page-name{
+		display: flex;
+		align-items: center;
+		.card{
+			position: relative;
+			width: 15px;
+			height: 25px;
+			background-color: red;
+			border: solid 3px black;
+			border-radius: 5px;
+		}
+
+		.title{
+			margin-right: 0.4rem;
+			margin-bottom: 0;
+			font-size: 1.1rem;
+			font-family: "OpenSans", sans-serif;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+	}
+
+	#Workshops-manager-nav-header{
+		.card{
+			background-color: red;
+			border: solid 5px #572020;
+		}
+	}
+	#decks-manager-nav-header{
+		.card{
+			background-color: #FFF06C;
+			border: solid 5px #BBB36E;
+		}
+	}
+	#cards-manager-nav-header{
+		.card{
+			background-color: #73BCFF;
+			border: solid 5px #D2E2F0;
+		}
+	}
+	#login-nav-header{
+		.card{
+			background-color: #07EA1E;
+			border: solid 5px #5D8A62;
+		}
+	}
+
 	ul{
 		margin-left: 0;
 		padding-left: 0.3rem;
