@@ -11,25 +11,13 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <!-- Fonts -->
-<!--     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> -->
-
 </head>
 <body>
     <div id="app">
-        <nav id="main-nav">
-            <div class="">
+        @component('layouts.nav')
+        @endcomponent
 
-                <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
-                    <span id="logo">🃏</span>
-                    <span class="text-uppercase font-weight-bold ml-3">Crash Card Club</span>
-                </a>
-
-            </div>
-        </nav>
-
-        <main class="py-4">
+        <main>
             @yield('content')
         </main>
     </div>

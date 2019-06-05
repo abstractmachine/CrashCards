@@ -10,8 +10,168 @@
   font-style: normal;
 }
 
-#main-nav #logo {
-  font-size: 2rem;
+h1 {
+  font-size: 2.2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+h6 {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+#main-nav .logo-container {
+  text-decoration: none;
+  color: black;
+}
+
+#main-nav .logo-container .text {
+  font-size: 3.5rem;
+}
+
+#main-nav .logo-container #logo {
+  font-size: 3rem;
+}
+
+#main-nav ul {
+  margin-left: 0;
+  padding-left: 0.3rem;
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+#main-nav ul .nav-elem {
+  max-width: 20px;
+  overflow: visible;
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+#main-nav ul .nav-elem a {
+  text-decoration: none;
+}
+
+#main-nav ul .nav-elem:hover {
+  max-width: 150px;
+  padding-left: 2rem;
+  padding-right: 1rem;
+}
+
+#main-nav ul .nav-elem .card {
+  position: relative;
+  width: 40px;
+  height: 60px;
+  background-color: red;
+  border: solid 5px black;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+#main-nav ul .nav-elem .title {
+  color: white;
+  font-family: "OpenSans", sans-serif;
+  font-weight: bold;
+  background-color: red;
+  padding: 0.1rem 0.4rem;
+}
+
+#main-nav ul #workshop-nav .card {
+  background-color: red;
+  border: solid 5px #572020;
+}
+
+#main-nav ul #workshop-nav .title {
+  background-color: red;
+}
+
+#main-nav ul #decks-nav .card {
+  background-color: #FFF06C;
+  border: solid 5px #BBB36E;
+}
+
+#main-nav ul #decks-nav .title {
+  background-color: #FFF06C;
+}
+
+#main-nav ul #cards-nav .card {
+  background-color: #73BCFF;
+  border: solid 5px #D2E2F0;
+}
+
+#main-nav ul #cards-nav .title {
+  background-color: #73BCFF;
+}
+
+#main-nav ul #login-nav .card {
+  background-color: #07EA1E;
+  border: solid 5px #5D8A62;
+}
+
+#main-nav ul #login-nav .title {
+  background-color: #07EA1E;
+}
+
+#main-nav ul #register-nav .card {
+  background-color: red;
+  border: solid 5px black;
+}
+
+#main-nav ul #register-nav .title {
+  background-color: red;
+}
+
+#main-nav ul #logout-nav .card {
+  background-color: red;
+  border: solid 5px black;
+}
+
+#main-nav ul #logout-nav .title {
+  background-color: red;
+}
+
+#main-nav ul #user-nav .card {
+  background-color: red;
+  border: solid 5px black;
+}
+
+#main-nav ul #user-nav .title {
+  background-color: red;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+main {
+  padding: 1rem 0;
 }
 
 html {
