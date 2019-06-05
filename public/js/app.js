@@ -14351,7 +14351,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     // components: { Container, Draggable },
-    el: '#app'
+    el: '#app',
+    methods: {
+        toogleMobileNav: function toogleMobileNav() {
+            document.getElementsByClassName("mobile-nav")[0].classList.toggle('invisible');
+        }
+    }
 });
 
 /***/ }),

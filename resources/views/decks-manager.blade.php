@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col border-dark border">
                 
-                <h3>Decks</h3>
+                <h2>Decks</h2>
                 
                 <deck-bag :decks="{{ $decks->toJson() }}"
                             url-ajax="{{ route('decks-manager') }}" 

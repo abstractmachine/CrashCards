@@ -1,4 +1,4 @@
-<nav id="main-nav">
+<nav id="main-nav" v-on:click="toogleMobileNav">
     <div class="nav-header">
         <a class="logo-container" href="{{ url('/') }}">
             <span id="logo">🃏</span>
@@ -72,4 +72,9 @@
             @endguest
         </ul>
     </div>
+
+    <div class="mobile-nav invisible">
+        <h2>Mobile nav</h2>
+    </div>
+
 </nav>

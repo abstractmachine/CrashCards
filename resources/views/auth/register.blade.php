@@ -1,3 +1,5 @@
+@section('title', 'Inscription')
+
 @extends('layouts.app')
 
 @section('content')

@@ -23,5 +23,10 @@ Vue.use(VueSelect, {
 
 const app = new Vue({
     // components: { Container, Draggable },
-    el: '#app'
+    el: '#app',
+    methods: {
+    	toogleMobileNav: function(){
+    		document.getElementsByClassName("mobile-nav")[0].classList.toggle('invisible');
+    	}
+    }
 });

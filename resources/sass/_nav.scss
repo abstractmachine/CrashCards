@@ -7,19 +7,37 @@
 #main-nav{
 	.nav-header{
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-start;
+		flex-direction: column;
 		align-items: center;
 	}
+
 	.logo-container{
 		text-decoration: none;
 		color: black;
 		.text{
-			font-size: 3.5rem;
+			font-size: 1.5rem;
 		}
 
 		#logo{
-			font-size: 3rem;
+			font-size: 2rem;
 		} 
+	}
+
+	@media (min-width: $breakpoint-tablet) {
+		.nav-header{
+			flex-direction: row;
+			justify-content: space-between;
+		}
+		.logo-container{
+			.text{
+				font-size: 3.5rem;
+			}
+
+			#logo{
+				font-size: 3rem;
+			} 
+		}
 	}
 
 	.page-name{
@@ -74,9 +92,17 @@
 		padding-left: 0.3rem;
 		list-style-type: none;
 		display: flex;
-		justify-content: flex-start;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 		
+		margin-bottom: 4rem;
+		// min-height-bottom: 100px;
 
+
+		@media (min-width: $breakpoint-tablet) {
+			flex-direction: row;
+		}
 		// &:hover .nav-elem{
 		// 	max-width: 150px;
 		// 	padding-left: 0.5rem;
@@ -88,15 +114,19 @@
 				text-decoration: none;
 			}
 
-			max-width: 20px;
 			overflow: visible;
 			transition: all 0.4s;
 			// transition-timing-function: ease-in;
 
-			&:hover{
-				max-width: 150px;
-				padding-left: 2rem;
-				padding-right: 1rem;
+			height: 10px;
+			@media (min-width: $breakpoint-tablet){
+				height: unset;
+				max-width: 20px;
+				&:hover{
+					max-width: 150px;
+					padding-left: 2rem;
+					padding-right: 1rem;
+				} 
 			}
 
 			// width: 50px;
@@ -117,7 +147,14 @@
 				font-weight: bold;
 				background-color: red;
 				padding: 0.1rem 0.4rem;	
+				display: none;
+
+				@media (min-width: $breakpoint-tablet){
+					display: unset;
+				}
+
 			}
+
 		}
 
 		#workshop-nav{
@@ -184,4 +221,25 @@
 			}	
 		}
 	}
+
+	.nav-container{
+		pointer-events: none;
+
+		@media (min-width: $breakpoint-tablet) {
+			pointer-events: unset;
+		}
+	}
+	.mobile-nav{
+		position: absolute;
+		left: 0; top: 0;
+		width: 100vw;
+		min-height: 100vh;
+		background-color: rgba(0,0,0,0.3);	
+		@media (min-width: $breakpoint-tablet) {
+			display: none;
+			visibility: hidden;
+		}
+	}
+
 }
+

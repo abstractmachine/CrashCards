@@ -47,9 +47,13 @@ p {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -61,11 +65,31 @@ p {
 }
 
 #main-nav .logo-container .text {
-  font-size: 3.5rem;
+  font-size: 1.5rem;
 }
 
 #main-nav .logo-container #logo {
-  font-size: 3rem;
+  font-size: 2rem;
+}
+
+@media (min-width: 800px) {
+  #main-nav .nav-header {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+
+  #main-nav .logo-container .text {
+    font-size: 3.5rem;
+  }
+
+  #main-nav .logo-container #logo {
+    font-size: 3rem;
+  }
 }
 
 #main-nav .page-name {
@@ -122,26 +146,50 @@ p {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 800px) {
+  #main-nav ul {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+  }
 }
 
 #main-nav ul .nav-elem {
-  max-width: 20px;
   overflow: visible;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
+  height: 10px;
 }
 
 #main-nav ul .nav-elem a {
   text-decoration: none;
 }
 
-#main-nav ul .nav-elem:hover {
-  max-width: 150px;
-  padding-left: 2rem;
-  padding-right: 1rem;
+@media (min-width: 800px) {
+  #main-nav ul .nav-elem {
+    height: unset;
+    max-width: 20px;
+  }
+
+  #main-nav ul .nav-elem:hover {
+    max-width: 150px;
+    padding-left: 2rem;
+    padding-right: 1rem;
+  }
 }
 
 #main-nav ul .nav-elem .card {
@@ -160,6 +208,13 @@ p {
   font-weight: bold;
   background-color: red;
   padding: 0.1rem 0.4rem;
+  display: none;
+}
+
+@media (min-width: 800px) {
+  #main-nav ul .nav-elem .title {
+    display: unset;
+  }
 }
 
 #main-nav ul #workshop-nav .card {
@@ -225,12 +280,43 @@ p {
   background-color: red;
 }
 
+#main-nav .nav-container {
+  pointer-events: none;
+}
+
+@media (min-width: 800px) {
+  #main-nav .nav-container {
+    pointer-events: unset;
+  }
+}
+
+#main-nav .mobile-nav {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 800px) {
+  #main-nav .mobile-nav {
+    display: none;
+    visibility: hidden;
+  }
+}
+
 .clickable {
   cursor: pointer;
 }
 
 main {
   padding: 1rem 0;
+}
+
+.invisible {
+  opacity: 0;
+  display: none;
 }
 
 html {
@@ -245,16 +331,5 @@ html {
 
 .page-title {
   border-bottom: 5px solid black;
-}
-
-.form-group input {
-  border-radius: 3px;
-  border: 3px solid black;
-  padding: 0.3rem 0.6rem;
-}
-
-.input-group-text {
-  border: 1px dashed black;
-  background: unset !important;
 }
 
