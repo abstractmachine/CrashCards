@@ -67,14 +67,73 @@
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
-
-
             @endguest
         </ul>
     </div>
 
     <div class="mobile-nav invisible">
-        <h2>Mobile nav</h2>
+        <ul>
+            <li class="nav-elem" id="workshops-nav">
+                <a href="{{ route('workshops-manager') }}">
+                    <div class="card">
+                        <span class="title">Workshops</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-elem" id="decks-nav">
+                <a href="{{ route('decks-manager') }}">
+                    <div class="card">
+                        <span class="title">Decks</span>
+                    </div>
+                </a>
+            </li>
+            <li class="nav-elem" id="cards-nav">
+                <a href="{{ route('cards-manager') }}">
+                    <div class="card">
+                        <span class="title">Cards</span>
+                    </div>
+                </a>
+            </li>
+
+            @guest
+                <li class="nav-elem" id="login-nav">
+                    <a href="{{ route('login') }}">
+                        <div class="card">
+                            <span class="title">Connection</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-elem" id="register-nav">
+                    <a href="{{ route('register') }}">
+                        <div class="card">
+                            <span class="title">Inscription</span>
+                        </div>
+                    </a>
+                </li>
+            @else
+
+                <li class="nav-elem" id="user-nav">
+                    <a href="{{ route('user') }}">
+                        <div class="card">
+                            <span class="title">Profile</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-elem" id="logout-nav">
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                        <div class="card">
+                            <span class="title">Déconnection</span>
+                        </div>
+                    </a>
+                </li>
+
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            @endguest
+        </ul>
+
     </div>
 
 </nav>

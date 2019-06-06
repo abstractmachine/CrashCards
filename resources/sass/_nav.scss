@@ -102,12 +102,8 @@
 
 		@media (min-width: $breakpoint-tablet) {
 			flex-direction: row;
+			justify-content: flex-start;
 		}
-		// &:hover .nav-elem{
-		// 	max-width: 150px;
-		// 	padding-left: 0.5rem;
-		// 	padding-right: 0.5rem;
-		// }
 
 		.nav-elem{
 			a{
@@ -229,6 +225,7 @@
 			pointer-events: unset;
 		}
 	}
+
 	.mobile-nav{
 		position: absolute;
 		left: 0; top: 0;
@@ -239,6 +236,116 @@
 			display: none;
 			visibility: hidden;
 		}
+
+
+	ul{
+		width: 100%;
+		margin-left: 0;
+		list-style-type: none;
+		display: flex;
+		justify-content: flex-start;
+		flex-direction: row;
+		flex-wrap: wrap;
+		// min-height-bottom: 100px;
+		.nav-elem{
+			a{
+				text-decoration: none;
+			}
+
+			transition: all 0.4s;
+			width: 50%;
+			height: unset;
+
+			// width: 50px;
+			// display: inline-block;
+			.card{
+				position: relative;
+				width: 150px;
+				max-width: 45vw;
+				height: 260px;
+				max-height: 45vw;
+				background-color: red;
+				border: solid 5px black;
+				border-radius: 5px;
+				margin-bottom: 0.5rem;
+
+				.title{
+					color: white;
+					font-family: "OpenSans", sans-serif;
+					font-weight: bold;
+					background-color: red;
+					padding: 0.1rem 0.4rem;	
+					display: inline-block !important;
+				}
+			}	
+
+
+		}
+
+		#workshop-nav{
+			.card{
+				background-color: red;
+				border: solid 5px #572020;
+			}
+			.title{
+				background-color: red;
+			}	
+		}
+		#decks-nav{
+			.card{
+				background-color: #FFF06C;
+				border: solid 5px #BBB36E;
+			}
+			.title{
+				background-color: #FFF06C;
+			}	
+		}
+		#cards-nav{
+			.card{
+				background-color: #73BCFF;
+				border: solid 5px #D2E2F0;
+			}
+			.title{
+				background-color: #73BCFF;
+			}	
+		}
+		#login-nav{
+			.card{
+				background-color: #07EA1E;
+				border: solid 5px #5D8A62;
+			}
+			.title{
+				background-color: #07EA1E;
+			}	
+		}
+		#register-nav{
+			.card{
+				background-color: red;
+				border: solid 5px black;
+			}
+			.title{
+				background-color: red;
+			}	
+		}
+		#logout-nav{
+			.card{
+				background-color: red;
+				border: solid 5px black;
+			}
+			.title{
+				background-color: red;
+			}	
+		}
+		#user-nav{
+			.card{
+				background-color: red;
+				border: solid 5px black;
+			}
+			.title{
+				background-color: red;
+			}	
+		}
+	}
 	}
 
 }

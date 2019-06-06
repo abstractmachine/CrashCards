@@ -165,6 +165,9 @@ p {
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
   }
 }
 
@@ -304,6 +307,119 @@ p {
     display: none;
     visibility: hidden;
   }
+}
+
+#main-nav .mobile-nav ul {
+  width: 100%;
+  margin-left: 0;
+  list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+#main-nav .mobile-nav ul .nav-elem {
+  -webkit-transition: all 0.4s;
+  transition: all 0.4s;
+  width: 50%;
+  height: unset;
+}
+
+#main-nav .mobile-nav ul .nav-elem a {
+  text-decoration: none;
+}
+
+#main-nav .mobile-nav ul .nav-elem .card {
+  position: relative;
+  width: 150px;
+  max-width: 45vw;
+  height: 260px;
+  max-height: 45vw;
+  background-color: red;
+  border: solid 5px black;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+#main-nav .mobile-nav ul .nav-elem .card .title {
+  color: white;
+  font-family: "OpenSans", sans-serif;
+  font-weight: bold;
+  background-color: red;
+  padding: 0.1rem 0.4rem;
+  display: inline-block !important;
+}
+
+#main-nav .mobile-nav ul #workshop-nav .card {
+  background-color: red;
+  border: solid 5px #572020;
+}
+
+#main-nav .mobile-nav ul #workshop-nav .title {
+  background-color: red;
+}
+
+#main-nav .mobile-nav ul #decks-nav .card {
+  background-color: #FFF06C;
+  border: solid 5px #BBB36E;
+}
+
+#main-nav .mobile-nav ul #decks-nav .title {
+  background-color: #FFF06C;
+}
+
+#main-nav .mobile-nav ul #cards-nav .card {
+  background-color: #73BCFF;
+  border: solid 5px #D2E2F0;
+}
+
+#main-nav .mobile-nav ul #cards-nav .title {
+  background-color: #73BCFF;
+}
+
+#main-nav .mobile-nav ul #login-nav .card {
+  background-color: #07EA1E;
+  border: solid 5px #5D8A62;
+}
+
+#main-nav .mobile-nav ul #login-nav .title {
+  background-color: #07EA1E;
+}
+
+#main-nav .mobile-nav ul #register-nav .card {
+  background-color: red;
+  border: solid 5px black;
+}
+
+#main-nav .mobile-nav ul #register-nav .title {
+  background-color: red;
+}
+
+#main-nav .mobile-nav ul #logout-nav .card {
+  background-color: red;
+  border: solid 5px black;
+}
+
+#main-nav .mobile-nav ul #logout-nav .title {
+  background-color: red;
+}
+
+#main-nav .mobile-nav ul #user-nav .card {
+  background-color: red;
+  border: solid 5px black;
+}
+
+#main-nav .mobile-nav ul #user-nav .title {
+  background-color: red;
 }
 
 .clickable {
