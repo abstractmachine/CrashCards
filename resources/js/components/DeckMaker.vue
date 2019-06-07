@@ -1,41 +1,34 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <div class="row">
-                <div class="col">
-                    
-                    <div class="input-group">
-                        <input type="text" class="form-control" v-model="deck.name" v-on:focusout="saveDeckName">
-                    </div>  
+    <div class="deck-macker">
+        <h3>Deck</h3>
 
-                </div>
-            </div>
-            <div class="row deck-maker mt-3">
-                <div class="col-4 border border-dark" v-for="(category, catKey) in allCategories" :key="catKey">
-                    <button 
-                        type="button" 
-                        class="close " 
-                        aria-label="Close" 
-                        v-on:click="deleteCategory(category)" >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control auto-input" v-model="deck.name" v-on:focusout="saveDeckName">
 
-                    <div class="input-group">
-                        <h5>category</h5>
-                        <input type="text" class="form-control" v-model="category.name" v-on:focusout="saveCategoryName(category)">
-                    </div>  
+            <button class="ml-3" @click="addCategory"> add category </button>
+        </div>  
 
-                    <draggable-cards-container 
-                    :base-url="urlAjax" 
-                    :items='category.cards'
-                    :category-id='category.id'>
-                    </draggable-cards-container>
+        <div class="deck">
+            <div class="category" v-for="(category, catKey) in allCategories" :key="catKey">
 
-                </div>
+                <div class="input-group d-flex justify-content-center">
+                    <input type="text" class="form-control auto-input" v-model="category.name" v-on:focusout="updateCategory(category.id, $event)" :placeholder="'Catégorie ' +  category.id">
+                </div>  
 
-                <div class="col-2">
-                    <button class="btn btn-dark mt-3" @click="addCategory"> add category </button>
-                </div>
+                <button 
+                    type="button" 
+                    class="close" 
+                    aria-label="Close" 
+                    v-on:click="deleteCategory(category)" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+
+                <draggable-cards-container 
+                :base-url="urlAjax" 
+                :items='category.cards'
+                :category-id='category.id'
+                v-on:updated-cards="updateCardsCategory($event, category.id)">
+                </draggable-cards-container>
 
             </div>
         </div>
@@ -66,22 +59,40 @@
         mounted() {
         },
         methods:{
-            saveCategoryName:function(category){
+            updateCardsCategory: function(event, categoryId){
+                var tempCategory = this.allCategories.find(
+                    function(element){
+                      return element.id == categoryId;
+                    }
+                );
+                tempCategory.cards = event;
+            },
+            updateCategory:function(categoryId, event){
+                this.autoInputReset(event.target);
+
                 var vueApp = this;
-                category.deck_id = this.deck.id;
-                console.log()
-                // axios.post(this.urlAjax + '/remove', {
-                //   _token: $('meta[name=csrf-token]').attr('content'),
-                //   _data: category,
-                // })
-                // .then(response => {
-                //     if(response.data == true){
-                //         this.allDecks.splice(index,1);
-                //     }
-                // })
-                // .catch(e => {
-                //   console.log(e)
-                // })
+                var tempCategory = this.allCategories.find(
+                    function(element) {
+                      return element.id == categoryId;
+                    }
+                );
+
+                axios.post(this.urlAjax + '/category/update', {
+                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _data: tempCategory,
+                })
+                .then(response => {
+                    console.log(response.data)
+                    if(response.data == true){
+                        this.autoInputSuccess(event.target);
+                    }
+                    else{
+                        this.autoInputFailed(event.target);
+                    }
+                })
+                .catch(e => {
+                  console.log(e)
+                })
             },
             addCategory: function(){
                 axios.post(this.urlAjax + '/category/add', {
@@ -93,7 +104,7 @@
 
                     if(response.data !== null)
                     {   
-                        this.allCategories.push(response.data);
+                        this.allCategories.unshift(response.data);
                     }
 
                 })
@@ -115,7 +126,6 @@
                     if(response.data == true)
                     {
                         var index = this.allCategories.indexOf(this.toDelete);
-                        console.log(index);
                         this.allCategories.splice(index, 1);
                     }
                 })
@@ -123,19 +133,24 @@
                   console.log(e)
                 })
             },
-            saveDeckName:function(){
+            saveDeckName:function(event){
                 var vueApp = this; 
+
+                this.autoInputReset(event.target);
 
                 axios.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
                   _token: $('meta[name=csrf-token]').attr('content'),
                   _data: this.deck,
                 })
                 .then(response => {
-                    // if(data === 'true')
-                    // {
-                    //     var index = vueApp.allCategories.indexOf(vueApp.toDelete);
-                    //     vueApp.allCategories.splice(index, 1);
-                    // }
+                    console.log(response.data)
+                    if(response.data == true)
+                    {
+                        this.autoInputSuccess(event.target);
+                    }
+                    else{
+                        this.autoInputFailed(event.target);
+                    }
                 })
                 .catch(e => {
                   console.log(e)
@@ -149,20 +164,42 @@
 
 
 <style scoped lang="scss">
+    .deck-macker{
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        width: 75vw;
 
-    .card {
-      width: 150px;
-      position: relative;
+        .deck{
+            display: flex;
+            flex-direction: row;
+            margin-top: 1rem;
+            padding: 2rem 0;
+            position: relative;
+            top: -2rem;
 
-        .category-name{
-            color: black;
-            position: absolute;
-            bottom: -40px;
-            left: 0;
-            width: 100%;
-            text-align: center;
+            .category{   
+                border: solid 2px grey;
+                margin-right: 2rem;
+                position: relative;
+                overflow:visible;   
+
+                .close{
+                    position: absolute;
+                    right: -20px;
+                    top: -20px;
+                    border-radius: 100%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 0; margin: 0;
+                    background-color: white;
+                    border-color: red;
+                }
+
+            }
         }
     }
-
-
 </style>

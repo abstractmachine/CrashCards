@@ -14346,17 +14346,35 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('user-editor', __webpack_r
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_js_modal___default.a);
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_cool_select___default.a, {
-    theme: 'bootstrap' // or 'material-design'
+        theme: 'bootstrap' // or 'material-design'
+});
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
+        methods: {
+                autoInputReset: function autoInputReset(target) {
+                        target.classList.remove('saved-success');
+                        target.classList.remove('saved-failed');
+                        target.classList.add('saving');
+                },
+                autoInputSuccess: function autoInputSuccess(target) {
+                        target.classList.remove('saving');
+                        target.classList.add('saved-success');
+                },
+                autoInputFailed: function autoInputFailed(target) {
+                        target.classList.remove('saving');
+                        target.classList.add('saved-failed');
+                }
+        }
 });
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
-    // components: { Container, Draggable },
-    el: '#app',
-    methods: {
-        toogleMobileNav: function toogleMobileNav() {
-            document.getElementsByClassName("mobile-nav")[0].classList.toggle('invisible');
+        // components: { Container, Draggable },
+        el: '#app',
+        methods: {
+                toogleMobileNav: function toogleMobileNav() {
+                        document.getElementsByClassName("mobile-nav")[0].classList.toggle('invisible');
+                }
         }
-    }
 });
 
 /***/ }),
@@ -49082,13 +49100,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -49115,7 +49126,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             return this.allCards.filter(function (card) {
                 var result = false;
-                if (card.name.match(_this.search) || card.subtitle.match(_this.search) || card.author.username.match(_this.search)) result = true;
+
+                if (card.name.match(_this.search) || card.author.username.match(_this.search)) {
+                    result = true;
+                } else if (card.subtitle != null) {
+                    if (card.subtitle.match(_this.search)) {
+                        result = true;
+                    }
+                }
+
                 if (_this.onlyMe && _this.author != null) {
                     if (_this.author.id != card.author.id) result = false;
                 }
@@ -49129,8 +49148,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.cardsToUpdate.push(this.allCards[i]);
         }
 
-        console.log('author');
-        console.log(this.author);
+        this.orderBy('id');
     },
 
     methods: {
@@ -49156,7 +49174,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.newCard.author = this.author.id;
             }
 
-            if (this.newCard.name != null && this.newCard.subtitle != null && this.newCard.author != null) {
+            if (this.newCard.name != null && this.newCard.author != null) {
+
+                if (this.newCard.subtitle == null) {
+                    this.newCard.subtitle = "";
+                }
 
                 axios.post(this.urlAjax + '/add', {
                     _token: $('meta[name=csrf-token]').attr('content'),
@@ -49170,6 +49192,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         _this2.allCards.push(response.data);
                         _this2.cardsToUpdate.push(response.data);
                         _this2.newCard = {};
+
+                        _this2.allCards.sort(_this2.compare);
                     }
                 }).catch(function (e) {
                     console.log(e);
@@ -49182,7 +49206,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var vueApp = this;
             this.toUpdate = card;
 
-            if (this.toUpdate.name != null && this.toUpdate.subtitle != null && this.toUpdate.author != null) {
+            if (this.toUpdate.name != null != null && this.toUpdate.author != null) {
+
+                if (this.newCard.subtitle == null) {
+                    this.newCard.subtitle = "";
+                }
 
                 axios.post(this.urlAjax + '/update', {
                     _token: $('meta[name=csrf-token]').attr('content'),
@@ -49201,8 +49229,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         toggleEditMode: function toggleEditMode(card) {
-
-            console.log(card);
             card = this.allCards[this.allCards.indexOf(card)];
             card.editMode = !card.editMode;
         },
@@ -49216,9 +49242,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _token: $('meta[name=csrf-token]').attr('content'),
                 _data: card
             }).then(function (response) {
-                if (response.data === 'true') {
+                if (response.data == true) {
                     var index = _this4.allCards.indexOf(_this4.toDelete);
-                    console.log('index = ' + index);
                     _this4.allCards.splice(index, 1);
                     _this4.cardsToUpdate.splice(index, 1);
                 }
@@ -49241,9 +49266,11 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col mb-3 d-flex justify-content-start" }, [
-          _c("div", { staticClass: "form-group" }, [
-            _c("div", { staticClass: "input-group mb-3" }, [
+        _c(
+          "div",
+          { staticClass: "d-flex justify-content-start align-items-center" },
+          [
+            _c("div", { staticClass: "form-group mr-3" }, [
               _vm._m(0),
               _vm._v(" "),
               _c("input", {
@@ -49266,61 +49293,70 @@ var render = function() {
                   }
                 }
               })
-            ])
-          ]),
-          _vm._v(" "),
-          _vm.author != null
-            ? _c("div", { staticClass: "form-group ml-3 w-25" }, [
-                _vm._m(1),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.onlyMe,
-                      expression: "onlyMe"
-                    }
-                  ],
-                  attrs: { type: "checkbox" },
-                  domProps: {
-                    checked: Array.isArray(_vm.onlyMe)
-                      ? _vm._i(_vm.onlyMe, null) > -1
-                      : _vm.onlyMe
-                  },
-                  on: {
-                    change: function($event) {
-                      var $$a = _vm.onlyMe,
-                        $$el = $event.target,
-                        $$c = $$el.checked ? true : false
-                      if (Array.isArray($$a)) {
-                        var $$v = null,
-                          $$i = _vm._i($$a, $$v)
-                        if ($$el.checked) {
-                          $$i < 0 && (_vm.onlyMe = $$a.concat([$$v]))
+            ]),
+            _vm._v(" "),
+            _vm.author != null
+              ? _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.onlyMe,
+                        expression: "onlyMe"
+                      }
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(_vm.onlyMe)
+                        ? _vm._i(_vm.onlyMe, null) > -1
+                        : _vm.onlyMe
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.onlyMe,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.onlyMe = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.onlyMe = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
                         } else {
-                          $$i > -1 &&
-                            (_vm.onlyMe = $$a
-                              .slice(0, $$i)
-                              .concat($$a.slice($$i + 1)))
+                          _vm.onlyMe = $$c
                         }
-                      } else {
-                        _vm.onlyMe = $$c
                       }
                     }
-                  }
-                }),
-                _vm._v(" "),
-                _c("p", [_vm._v("Only Mine")])
-              ])
-            : _vm._e()
-        ])
+                  }),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("Only Mine")])
+                ])
+              : _vm._e()
+          ]
+        )
       ]),
       _vm._v(" "),
-      _c("table", { staticClass: "table" }, [
+      _c("table", { staticClass: "table mt-3" }, [
         _c("thead", [
           _c("tr", [
-            _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
+            _c(
+              "th",
+              {
+                attrs: { scope: "col" },
+                on: {
+                  click: function($event) {
+                    _vm.orderBy("id")
+                  }
+                }
+              },
+              [_vm._v("#")]
+            ),
             _vm._v(" "),
             _c(
               "th",
@@ -49621,32 +49657,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-prepend" }, [
-      _c(
-        "span",
-        { staticClass: "input-group-text", attrs: { id: "basic-addon1" } },
-        [_vm._v("🔍")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custom-control custom-switch" }, [
-      _c("input", {
-        staticClass: "custom-control-input",
-        attrs: { type: "checkbox", id: "customSwitch1" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        {
-          staticClass: "custom-control-label",
-          attrs: { for: "customSwitch1" }
-        },
-        [_vm._v("Toggle this switch element")]
-      )
+    return _c("div", { staticClass: "input-prepend" }, [
+      _c("span", { staticClass: "input-icon" }, [_vm._v("🔍")])
     ])
   }
 ]
@@ -49745,7 +49757,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card[data-v-72161c84] {\n  width: 150px;\n  height: 300px;\n  position: relative;\n}\n.card .category-name[data-v-72161c84] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.decks-container[data-v-72161c84] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: stretch;\n      -ms-flex-align: stretch;\n          align-items: stretch;\n  -ms-flex-wrap: wrap;\n      flex-wrap: wrap;\n  -webkit-box-orient: horizontal;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: row;\n          flex-direction: row;\n}\n.decks-container .deck-container[data-v-72161c84] {\n    border: 4mm ridge rgba(170, 50, 220, 0.6);\n    padding: 1rem;\n    margin: 1rem;\n    max-width: 30%;\n}\n.decks-container .deck-container .close[data-v-72161c84] {\n      float: right;\n      margin: 1rem;\n      border-color: red;\n      border-radius: 100%;\n}\n", ""]);
 
 // exports
 
@@ -49756,16 +49768,6 @@ exports.push([module.i, "\n.card[data-v-72161c84] {\n  width: 150px;\n  height: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -49862,69 +49864,47 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
+  return _c("div", [
+    _c("div", { staticClass: "mb-3" }, [
+      _c("button", { on: { click: _vm.createDeck } }, [_vm._v(" New Deck ")])
+    ]),
+    _vm._v(" "),
     _c(
       "div",
-      { staticClass: "col" },
-      [
-        _c("div", { staticClass: "row mb-3" }, [
-          _c("div", { staticClass: "col" }, [
-            _c(
-              "button",
-              { staticClass: "btn btn-dark", on: { click: _vm.createDeck } },
-              [_vm._v(" Add deck ")]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.allDecks, function(deck, index) {
-            return _c(
-              "div",
-              {
-                key: deck.id,
-                staticClass: "p-3 w-100 border col-3 deck border-light "
-              },
-              [
-                deck.author.id == _vm.author.id
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "close",
-                        attrs: { type: "button", "aria-label": "Close" },
-                        on: {
-                          click: function($event) {
-                            _vm.deleteDeck(index)
-                          }
+      { staticClass: "decks-container" },
+      _vm._l(_vm.allDecks, function(deck, index) {
+        return deck.author.id == _vm.author.id
+          ? _c("div", { key: deck.id, staticClass: "deck-container" }, [
+              deck.author.id == _vm.author.id
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "close",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          _vm.deleteDeck(index)
                         }
-                      },
-                      [
-                        _c("span", { attrs: { "aria-hidden": "true" } }, [
-                          _vm._v("×")
-                        ])
-                      ]
-                    )
-                  : _vm._e(),
+                      }
+                    },
+                    [
+                      _c("span", { attrs: { "aria-hidden": "true" } }, [
+                        _vm._v("×")
+                      ])
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("a", { attrs: { href: _vm.urlAjax + "/" + deck.id } }, [
+                _c("h3", { attrs: { scope: "row" } }, [
+                  _vm._v(_vm._s(deck.id) + " " + _vm._s(deck.name))
+                ]),
                 _vm._v(" "),
-                _c("a", { attrs: { href: _vm.urlAjax + "/" + deck.id } }, [
-                  _c("h3", { attrs: { scope: "row" } }, [
-                    _vm._v(_vm._s(deck.id) + " " + _vm._s(deck.name))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(deck.author.username))])
-                ])
-              ]
-            )
-          })
-        ),
-        _vm._v(" "),
-        _c("modal", { attrs: { name: "hello-world" } }, [
-          _vm._v("\n          hello, world!\n        ")
-        ])
-      ],
-      1
+                _c("td", [_vm._v(_vm._s(deck.author.username))])
+              ])
+            ])
+          : _vm._e()
+      })
     )
   ])
 }
@@ -50024,7 +50004,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card[data-v-55e61c80] {\n  width: 150px;\n  position: relative;\n}\n.card .category-name[data-v-55e61c80] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.deck-macker[data-v-55e61c80] {\n  margin-top: 1rem;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  width: 75vw;\n}\n.deck-macker .deck[data-v-55e61c80] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    margin-top: 1rem;\n    padding: 2rem 0;\n    position: relative;\n    top: -2rem;\n}\n.deck-macker .deck .category[data-v-55e61c80] {\n      border: solid 2px grey;\n      margin-right: 2rem;\n      position: relative;\n      overflow: visible;\n}\n.deck-macker .deck .category .close[data-v-55e61c80] {\n        position: absolute;\n        right: -20px;\n        top: -20px;\n        border-radius: 100%;\n        width: 40px;\n        height: 40px;\n        display: -webkit-box;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-pack: center;\n            -ms-flex-pack: center;\n                justify-content: center;\n        -webkit-box-align: center;\n            -ms-flex-align: center;\n                align-items: center;\n        padding: 0;\n        margin: 0;\n        background-color: white;\n        border-color: red;\n}\n", ""]);
 
 // exports
 
@@ -50037,13 +50017,6 @@ exports.push([module.i, "\n.card[data-v-55e61c80] {\n  width: 150px;\n  position
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd__);
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -50103,25 +50076,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {},
 
     methods: {
-        saveCategoryName: function saveCategoryName(category) {
+        updateCardsCategory: function updateCardsCategory(event, categoryId) {
+            var tempCategory = this.allCategories.find(function (element) {
+                return element.id == categoryId;
+            });
+            tempCategory.cards = event;
+        },
+        updateCategory: function updateCategory(categoryId, event) {
+            var _this = this;
+
+            this.autoInputReset(event.target);
+
             var vueApp = this;
-            category.deck_id = this.deck.id;
-            console.log();
-            // axios.post(this.urlAjax + '/remove', {
-            //   _token: $('meta[name=csrf-token]').attr('content'),
-            //   _data: category,
-            // })
-            // .then(response => {
-            //     if(response.data == true){
-            //         this.allDecks.splice(index,1);
-            //     }
-            // })
-            // .catch(e => {
-            //   console.log(e)
-            // })
+            var tempCategory = this.allCategories.find(function (element) {
+                return element.id == categoryId;
+            });
+
+            axios.post(this.urlAjax + '/category/update', {
+                _token: $('meta[name=csrf-token]').attr('content'),
+                _data: tempCategory
+            }).then(function (response) {
+                console.log(response.data);
+                if (response.data == true) {
+                    _this.autoInputSuccess(event.target);
+                } else {
+                    _this.autoInputFailed(event.target);
+                }
+            }).catch(function (e) {
+                console.log(e);
+            });
         },
         addCategory: function addCategory() {
-            var _this = this;
+            var _this2 = this;
 
             axios.post(this.urlAjax + '/category/add', {
                 _token: $('meta[name=csrf-token]').attr('content'),
@@ -50130,14 +50116,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log('success');
 
                 if (response.data !== null) {
-                    _this.allCategories.push(response.data);
+                    _this2.allCategories.unshift(response.data);
                 }
             }).catch(function (e) {
                 console.log(e);
             });
         },
         deleteCategory: function deleteCategory(category) {
-            var _this2 = this;
+            var _this3 = this;
 
             var vueApp = this;
             vueApp.toDelete = category;
@@ -50148,26 +50134,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 console.log('success');
                 if (response.data == true) {
-                    var index = _this2.allCategories.indexOf(_this2.toDelete);
-                    console.log(index);
-                    _this2.allCategories.splice(index, 1);
+                    var index = _this3.allCategories.indexOf(_this3.toDelete);
+                    _this3.allCategories.splice(index, 1);
                 }
             }).catch(function (e) {
                 console.log(e);
             });
         },
-        saveDeckName: function saveDeckName() {
+        saveDeckName: function saveDeckName(event) {
+            var _this4 = this;
+
             var vueApp = this;
+
+            this.autoInputReset(event.target);
 
             axios.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
                 _token: $('meta[name=csrf-token]').attr('content'),
                 _data: this.deck
             }).then(function (response) {
-                // if(data === 'true')
-                // {
-                //     var index = vueApp.allCategories.indexOf(vueApp.toDelete);
-                //     vueApp.allCategories.splice(index, 1);
-                // }
+                console.log(response.data);
+                if (response.data == true) {
+                    _this4.autoInputSuccess(event.target);
+                } else {
+                    _this4.autoInputFailed(event.target);
+                }
             }).catch(function (e) {
                 console.log(e);
             });
@@ -50190,119 +50180,111 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col" }, [
-          _c("div", { staticClass: "input-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.deck.name,
-                  expression: "deck.name"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text" },
-              domProps: { value: _vm.deck.name },
-              on: {
-                focusout: _vm.saveDeckName,
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.deck, "name", $event.target.value)
-                }
-              }
-            })
-          ])
-        ])
-      ]),
+  return _c("div", { staticClass: "deck-macker" }, [
+    _c("h3", [_vm._v("Deck")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "input-group mb-3" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.deck.name,
+            expression: "deck.name"
+          }
+        ],
+        staticClass: "form-control auto-input",
+        attrs: { type: "text" },
+        domProps: { value: _vm.deck.name },
+        on: {
+          focusout: _vm.saveDeckName,
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.$set(_vm.deck, "name", $event.target.value)
+          }
+        }
+      }),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "row deck-maker mt-3" },
-        [
-          _vm._l(_vm.allCategories, function(category, catKey) {
-            return _c(
+      _c("button", { staticClass: "ml-3", on: { click: _vm.addCategory } }, [
+        _vm._v(" add category ")
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "deck" },
+      _vm._l(_vm.allCategories, function(category, catKey) {
+        return _c(
+          "div",
+          { key: catKey, staticClass: "category" },
+          [
+            _c(
               "div",
-              { key: catKey, staticClass: "col-4 border border-dark" },
+              { staticClass: "input-group d-flex justify-content-center" },
               [
-                _c(
-                  "button",
-                  {
-                    staticClass: "close ",
-                    attrs: { type: "button", "aria-label": "Close" },
-                    on: {
-                      click: function($event) {
-                        _vm.deleteCategory(category)
-                      }
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: category.name,
+                      expression: "category.name"
                     }
-                  },
-                  [
-                    _c("span", { attrs: { "aria-hidden": "true" } }, [
-                      _vm._v("×")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "input-group" }, [
-                  _c("h5", [_vm._v("category")]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: category.name,
-                        expression: "category.name"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "text" },
-                    domProps: { value: category.name },
-                    on: {
-                      focusout: function($event) {
-                        _vm.saveCategoryName(category)
-                      },
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(category, "name", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("draggable-cards-container", {
+                  ],
+                  staticClass: "form-control auto-input",
                   attrs: {
-                    "base-url": _vm.urlAjax,
-                    items: category.cards,
-                    "category-id": category.id
+                    type: "text",
+                    placeholder: "Catégorie " + category.id
+                  },
+                  domProps: { value: category.name },
+                  on: {
+                    focusout: function($event) {
+                      _vm.updateCategory(category.id, $event)
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(category, "name", $event.target.value)
+                    }
                   }
                 })
-              ],
-              1
-            )
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-2" }, [
+              ]
+            ),
+            _vm._v(" "),
             _c(
               "button",
               {
-                staticClass: "btn btn-dark mt-3",
-                on: { click: _vm.addCategory }
+                staticClass: "close",
+                attrs: { type: "button", "aria-label": "Close" },
+                on: {
+                  click: function($event) {
+                    _vm.deleteCategory(category)
+                  }
+                }
               },
-              [_vm._v(" add category ")]
-            )
-          ])
-        ],
-        2
-      )
-    ])
+              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+            ),
+            _vm._v(" "),
+            _c("draggable-cards-container", {
+              attrs: {
+                "base-url": _vm.urlAjax,
+                items: category.cards,
+                "category-id": category.id
+              },
+              on: {
+                "updated-cards": function($event) {
+                  _vm.updateCardsCategory($event, category.id)
+                }
+              }
+            })
+          ],
+          1
+        )
+      })
+    )
   ])
 }
 var staticRenderFns = []
@@ -50401,7 +50383,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card-container[data-v-06ccfd2e] {\n  max-width: 300px;\n}\n", ""]);
+exports.push([module.i, "\n.card-container[data-v-06ccfd2e] {\n  width: 25vw;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n", ""]);
 
 // exports
 
@@ -50414,7 +50396,6 @@ exports.push([module.i, "\n.card-container[data-v-06ccfd2e] {\n  max-width: 300p
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd__);
-//
 //
 //
 //
@@ -50470,12 +50451,12 @@ var render = function() {
   return _c(
     "Container",
     {
-      staticClass: "row",
+      staticClass: "card-picker",
       attrs: { "group-name": "cards-container" },
       on: { drop: _vm.onDrop }
     },
     [
-      _c("h1", [_vm._v("toutes mes cartes :")]),
+      _c("h3", [_vm._v("Cartes :")]),
       _vm._v(" "),
       _vm._l(_vm.cards, function(card, key) {
         return _c(
@@ -50605,7 +50586,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card[data-v-84cff5a0] {\n  width: 150px;\n  height: 300px;\n  position: relative;\n}\n.card .category-name[data-v-84cff5a0] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n.cards-container[data-v-84cff5a0] {\n  overflow: scroll;\n}\n", ""]);
+exports.push([module.i, "\n.cards-container[data-v-84cff5a0] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n      -ms-flex-direction: column;\n          flex-direction: column;\n  -webkit-box-pack: start;\n      -ms-flex-pack: start;\n          justify-content: flex-start;\n  -webkit-box-align: stretch;\n      -ms-flex-align: stretch;\n          align-items: stretch;\n  padding: 1rem;\n  overflow-y: scroll;\n  overflow-x: hidden;\n  max-height: 500px;\n}\n.cards-container .smooth-dnd-draggable-wrapper[data-v-84cff5a0] {\n    overflow: visible;\n    margin: 1rem 0;\n}\n.cards-container .smooth-dnd-draggable-wrapper .card[data-v-84cff5a0] {\n      position: relative;\n      width: 90%;\n      margin: auto;\n      position: relative;\n}\n.cards-container .smooth-dnd-draggable-wrapper .card .category-name[data-v-84cff5a0] {\n        color: black;\n        position: absolute;\n        bottom: -40px;\n        left: 0;\n        width: 100%;\n        text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -50645,8 +50626,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -50656,18 +50635,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: { Container: __WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd__["Container"], Draggable: __WEBPACK_IMPORTED_MODULE_0_vue_smooth_dnd__["Draggable"] },
     props: ['items', 'categoryId', 'baseUrl'],
     data: function data() {
-        return {
-            arrayItems: Object.values(this.items)
-        };
+        return {};
     },
-    computed: {},
+    computed: {
+        arrayItems: function arrayItems() {
+            return Object.values(this.items);
+        }
+    },
     mounted: function mounted() {
         // console.log(this.categoryId)
     },
 
     methods: {
         onDrop: function onDrop(dragResult) {
-            // console.log(dragResult.droppedElement.id)
             var removedIndex = dragResult.removedIndex,
                 addedIndex = dragResult.addedIndex,
                 payload = dragResult.payload;
@@ -50676,23 +50656,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (removedIndex === null && addedIndex === null) {} else {
 
                 if (removedIndex !== null) {
-
                     this.arrayItems.splice(removedIndex, 1);
                 }
 
                 if (addedIndex !== null) {
 
                     var droppedElement = dragResult.droppedElement.getElementsByClassName('draggable-content')[0];
-                    // var card = {};
-                    // card.id = parseInt(droppedElement.getElementsByClassName('card-id')[0].innerHTML);
-                    // card.name =  droppedElement.getElementsByClassName('card-name')[0].innerHTML;
-                    // card.subtitle =  droppedElement.getElementsByClassName('card-subtitle')[0].innerHTML;
-
                     var cardId = parseInt(droppedElement.getElementsByClassName('card-id')[0].innerHTML);
                     this.saveCard(cardId, addedIndex);
-                    // console.log('save = ' + saved);
                 }
-                // console.log(this.arrayItems);
             }
         },
 
@@ -50709,12 +50681,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $.post(this.baseUrl + '/cards/detach/' + target.id + '/category/' + this.categoryId, {
                 '_token': $('meta[name=csrf-token]').attr('content')
             }, function (data) {
-                console.log('success');
-                console.log('result');
-                console.log(data);
-
                 if (data === 'true') {
                     vueApp.arrayItems.splice(vueApp.arrayItems.indexOf(vueApp.toDelete), 1);
+                    this.$emit('updated-cards', this.arrayItems);
                 }
             }.bind(vueApp));
         },
@@ -50725,13 +50694,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $.post(this.baseUrl + '/cards/save/' + id + '/category/' + this.categoryId, {
                 '_token': $('meta[name=csrf-token]').attr('content')
             }, function (data) {
-                console.log('success');
                 if (data !== 'false') {
                     vueApp.arrayItems.splice(vueApp.indexToAdd, 0, data);
+                    this.$emit('updated-cards', this.arrayItems);
                 }
             }.bind(vueApp));
         }
-
     }
 });
 
@@ -50750,57 +50718,48 @@ var render = function() {
       attrs: { "group-name": "cards-container" },
       on: { drop: _vm.onDrop }
     },
-    [
-      _c("p", [_vm._v("Cartes:")]),
-      _vm._v(" "),
-      _vm._l(_vm.arrayItems, function(item, key) {
-        return _c(
-          "Draggable",
-          { key: key, staticClass: "border-dark border mb-3" },
-          [
-            _c("div", { staticClass: "draggable-item p-2" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: { type: "button", "aria-label": "Close" },
-                  on: {
-                    click: function($event) {
-                      _vm.removeCard(item)
-                    }
+    _vm._l(_vm.arrayItems, function(item, key) {
+      return _c(
+        "Draggable",
+        { key: key, staticClass: "border-dark border mb-3" },
+        [
+          _c("div", { staticClass: "draggable-item p-2 card" }, [
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: { type: "button", "aria-label": "Close" },
+                on: {
+                  click: function($event) {
+                    _vm.removeCard(item)
                   }
-                },
-                [
-                  _c("span", { attrs: { "aria-hidden": "true" } }, [
-                    _vm._v("×")
-                  ])
-                ]
-              ),
+                }
+              },
+              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "draggable-content" }, [
+              _c("h5", [
+                _vm._v(_vm._s(_vm.categoryId) + " ," + _vm._s(key) + " "),
+                _c("span", { staticClass: "card-name" }, [
+                  _vm._v(_vm._s(item.name))
+                ])
+              ]),
               _vm._v(" "),
-              _c("div", { staticClass: "draggable-content" }, [
-                _c("h5", [
-                  _vm._v(" " + _vm._s(key) + " "),
-                  _c("span", { staticClass: "card-name" }, [
-                    _vm._v(_vm._s(item.name))
-                  ])
+              _c("h6", [
+                _c("span", { staticClass: "card-id" }, [
+                  _vm._v(_vm._s(item.id))
                 ]),
                 _vm._v(" "),
-                _c("h6", [
-                  _c("span", { staticClass: "card-id" }, [
-                    _vm._v(_vm._s(item.id))
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "card-subtitle" }, [
-                    _vm._v(_vm._s(item.subtitle))
-                  ])
+                _c("span", { staticClass: "card-subtitle" }, [
+                  _vm._v(_vm._s(item.subtitle))
                 ])
               ])
             ])
-          ]
-        )
-      })
-    ],
-    2
+          ])
+        ]
+      )
+    })
   )
 }
 var staticRenderFns = []

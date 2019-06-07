@@ -123,6 +123,9 @@
 					padding-left: 2rem;
 					padding-right: 1rem;
 				} 
+				&:first-child{
+					padding-left: 0rem;
+				}
 			}
 
 			// width: 50px;

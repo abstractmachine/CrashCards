@@ -26,7 +26,6 @@ class CardController extends Controller
 
             $request->validate([
                 '_data.name' => 'required',
-                '_data.subtitle' => 'required',
                 '_data.author' => 'required',
             ]);
 
@@ -68,7 +67,6 @@ class CardController extends Controller
             $request->validate([
                 '_data.id' => 'required|numeric',
                 '_data.name' => 'required',
-                '_data.subtitle' => 'required',
                 '_data.author' => 'required',
             ]);
 

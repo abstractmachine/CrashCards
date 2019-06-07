@@ -1,36 +1,26 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <div class="row mb-3">
-                <div class="col">
-                  <button class="btn btn-dark" @click="createDeck"> Add deck </button>
-                </div>
+    <div>
+        <div class="mb-3">
+            <button @click="createDeck"> New Deck </button>
+        </div>
 
-            </div>
+        <div class="decks-container">
+            <div v-for="(deck, index) in allDecks" v-if="deck.author.id == author.id" :key="deck.id" class="deck-container">
+        
+                <button 
+                    type="button" 
+                    class="close" 
+                    v-on:click="deleteDeck(index)"
+                    v-if="deck.author.id == author.id" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
 
-            <div class="row">
-                <div v-for="(deck, index) in allDecks"  :key="deck.id" class="p-3 w-100 border col-3 deck border-light ">
-            
-                    <button 
-                        type="button" 
-                        class="close" 
-                        aria-label="Close" 
-                        v-on:click="deleteDeck(index)"
-                        v-if="deck.author.id == author.id" >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+                <a :href="urlAjax + '/' + deck.id " class="">
+                    <h3 scope="row" >{{ deck.id }} {{ deck.name }}</h3>
+                    <td>{{ deck.author.username}}</td>
+                </a>
 
-                    <a :href="urlAjax + '/' + deck.id " class="">
-                        <h3 scope="row" >{{ deck.id }} {{ deck.name }}</h3>
-                        <td>{{ deck.author.username}}</td>
-                    </a>
-
-                </div>  
-            </div>
-
-            <modal name="hello-world">
-              hello, world!
-            </modal>
+            </div>  
         </div>
     </div>
 </template>
@@ -99,26 +89,31 @@
             }
 
         }
-    }
+    };
     
 </script>
 
 
 <style scoped lang="scss">
+    .decks-container{
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        flex-wrap: wrap;
+        flex-direction: row;
+        .deck-container{
+            border: 4mm ridge rgba(170, 50, 220, .6);
+            padding: 1rem;
+            margin: 1rem;
+            max-width: 30%;
 
-    .card {
-      width: 150px; height: 300px;
-      position: relative;
-
-        .category-name{
-            color: black;
-            position: absolute;
-            bottom: -40px;
-            left: 0;
-            width: 100%;
-            text-align: center;
+            .close{
+                float: right;
+                margin: 1rem;
+                border-color: red;
+                border-radius: 100%;
+            }
         }
     }
-
 
 </style>

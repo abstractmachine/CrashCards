@@ -81,10 +81,9 @@ class DeckController extends Controller
 
     public function update(Request $request, Deck $deck){
 
-        if ($request->ajax() && isset($deck) && Auth::check()) {
+        if ($request->ajax()) {
 
             $user = Auth::user();
-            // $deckUser = User::find($request->_data['author']['id']);
 
             $request->validate([
                 '_data' => 'required'
@@ -202,6 +201,26 @@ class DeckController extends Controller
 
     }
 
+    public function updateCategory(Deck $deck, Request $request){
+        if ($request->ajax()) {
 
+            $request->validate([
+                '_data.id' => 'required',
+            ]);
+
+            $user = Auth::user();
+
+            if($deck->author->id == $user->id){
+
+                $category = Category::findOrFail($request->_data['id']);
+                $category->fill($request->_data);
+                $category->save();
+
+                return 'true';
+            }else{
+                return 'false';
+            }
+        }
+    }
 
 }

@@ -2,40 +2,33 @@
     <div class="row">
         <div class="col">
             <div class="row">
-                <div class="col mb-3 d-flex justify-content-start">
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">🔍</span>
-                            </div>
-                            <input type="text" v-model="search">
+                <div class="d-flex justify-content-start align-items-center">
+                    <div class="form-group mr-3">
+                        <div class="input-prepend">
+                            <span class="input-icon">🔍</span>
                         </div>
+                        <input type="text" v-model="search">
                     </div>
 
-                    <div class="form-group ml-3 w-25" v-if="author != null">
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                          <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
-                        </div>
-                        
+                    <div class="form-group" v-if="author != null">
                         <input type="checkbox" v-model="onlyMe">
                         <p>Only Mine</p>
                     </div>
                 </div>
             </div>
 
-            <table class="table">
+            <table class="table mt-3">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col" v-on:click="orderBy('id')">#</th>
                   <th scope="col" class="clickable" v-on:click="orderBy('name')">Title</th>
                   <th scope="col" v-on:click="orderBy('subtitle')">Subtitle</th>
                   <th scope="col" v-on:click="orderBy('author.name')">Author</th>
                   <th scope="col"  v-if="author != null">interaction</th>
                 </tr>
               </thead>
-              <tbody>
 
+              <tbody>
                 <tr v-if='author != null'>
                     <th scope="row" >X</th>
                     <td><input class="form-control" type="text" v-model="newCard.name"></td>
@@ -104,8 +97,15 @@
             filteredCards: function(){
                 return this.allCards.filter((card) =>{
                     var result = false; 
-                    if(card.name.match(this.search) || card.subtitle.match(this.search) || card.author.username.match(this.search))
+
+                    if(card.name.match(this.search) || card.author.username.match(this.search)){
                         result = true;
+                    }else if(card.subtitle != null){
+                        if(card.subtitle.match(this.search)){
+                            result = true;
+                        }
+                    }
+
                     if(this.onlyMe && this.author != null)
                     {
                         if (this.author.id != card.author.id)
@@ -121,8 +121,7 @@
                 this.cardsToUpdate.push(this.allCards[i]);
             }
 
-            console.log('author')
-            console.log(this.author)
+            this.orderBy('id');
         },
         methods:{
             cardToUpdate: function(card){
@@ -147,7 +146,11 @@
                     this.newCard.author = this.author.id;
                 }
 
-                if(this.newCard.name != null && this.newCard.subtitle != null && this.newCard.author != null){
+                if(this.newCard.name != null && this.newCard.author != null){
+
+                    if(this.newCard.subtitle == null){
+                        this.newCard.subtitle = ""
+                    }
 
                     axios.post(this.urlAjax + '/add', {
                       _token: $('meta[name=csrf-token]').attr('content'),
@@ -163,6 +166,7 @@
                           this.cardsToUpdate.push(response.data);
                           this.newCard = {};
 
+                          this.allCards.sort(this.compare);
                         }
                     })
                     .catch(e => {
@@ -174,7 +178,11 @@
                 var vueApp = this;
                 this.toUpdate = card;
 
-                if(this.toUpdate.name != null && this.toUpdate.subtitle != null && this.toUpdate.author != null){
+                if(this.toUpdate.name != null != null && this.toUpdate.author != null){
+
+                    if(this.newCard.subtitle == null){
+                        this.newCard.subtitle = ""
+                    }
 
                     axios.post(this.urlAjax + '/update', {
                       _token: $('meta[name=csrf-token]').attr('content'),
@@ -195,8 +203,6 @@
                 }
             },
             toggleEditMode:function(card){
-
-                console.log(card)
                 card = this.allCards[this.allCards.indexOf(card)];
                 card.editMode = !card.editMode;
 
@@ -211,9 +217,8 @@
                   _data: card,
                 })
                 .then(response => {
-                    if(response.data === 'true'){
+                    if(response.data == true){
                         var index = this.allCards.indexOf(this.toDelete);
-                        console.log('index = ' + index)
                         this.allCards.splice(index,1);
                         this.cardsToUpdate.splice(index,1);
                     }

@@ -1,10 +1,63 @@
 input{
 	border-radius: 3px;
 	border: 3px solid black; 
-	padding: 0.3rem 0.6rem;
+	padding: 0.5rem 0.8rem;
+	font-size: 1.5rem;
 }
 
-.input-group-text{
-	border: 1px dashed black;
-	background: unset !important;
+
+.form-group{
+	display: flex;
+	justify-content: flex-start;
+	align-items: stretch;
+
+	.input-prepend{
+		border: 1px dashed black;
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+		padding: 0.2rem 0.5rem;
+		position: relative;
+		left: 3px;
+	}
+
+	p{
+		margin: 0;
+	}
+}
+
+.auto-input{
+	&:focus{
+		border: solid 5px orange;
+	}
+}
+
+.saving{
+  animation-name: saving-anim;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+.saved-success{
+  animation-name: saved-success-anim;
+  animation-duration: 1s;
+}
+.saved-failed{
+  animation-name: saved-failed-anim;
+  animation-duration: 1s;
+}
+
+@keyframes saving-anim {
+  0% {border: solid 5px orange;}
+  50% {border: solid 5px green;}
+  100% {border: solid 5px orange;}
+}
+
+@keyframes saved-success-anim {
+  0% {border: solid 2px orange;}
+  100% {border: solid 5px green;}
+}
+
+@keyframes saved-failed-anim {
+  0% {border: solid 2px orange;}
+  100% {border: solid 5px red;}
 }

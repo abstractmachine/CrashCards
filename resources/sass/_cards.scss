@@ -1,0 +1,51 @@
+
+.card-container, .deck{
+    .card{
+        left: 7px;
+        border: solid grey 5px;
+        position: relative;
+        margin: 1rem 0;
+        width: 80%;
+        padding: 0.6rem;
+        background-color: white;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: pink;
+            z-index: -1;
+        }
+
+        h5{
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        h6{
+            font-size: 1rem;
+            font-family: "OpenSans";
+            font-weight: bold;
+            margin: 0;
+        }
+    }
+}
+
+.deck-macker .category, .cards-container .card{
+    .close{
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0; margin: 0;
+        background-color: white;
+        border-color: red;
+    }
+}

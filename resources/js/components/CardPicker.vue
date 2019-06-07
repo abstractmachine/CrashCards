@@ -1,7 +1,6 @@
 <template>
-    
-    <Container @drop="onDrop" class="row" group-name="cards-container">   
-        <h1>toutes mes cartes :</h1>
+    <Container @drop="onDrop" class="card-picker" group-name="cards-container">   
+        <h3>Cartes :</h3>
         <Draggable class="card-container w-100" v-for="(card, key) in cards"  :key="key">
 
             <div class="card draggable-item">
@@ -48,7 +47,10 @@
 
 <style scoped lang="scss">
     .card-container{
-        max-width: 300px;
+        width: 25vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
 </style>

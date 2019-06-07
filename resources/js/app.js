@@ -21,6 +21,24 @@ Vue.use(VueSelect, {
   theme: 'bootstrap' // or 'material-design'
 })
 
+Vue.mixin({
+    methods: {
+    	autoInputReset: function(target){
+            target.classList.remove('saved-success');
+            target.classList.remove('saved-failed');
+            target.classList.add('saving');
+    	},
+    	autoInputSuccess: function(target){
+            target.classList.remove('saving');
+            target.classList.add('saved-success');
+    	},
+    	autoInputFailed: function(target){
+            target.classList.remove('saving');
+            target.classList.add('saved-failed');
+    	}
+    }
+})
+
 const app = new Vue({
     // components: { Container, Draggable },
     el: '#app',
