@@ -67,7 +67,7 @@
                 var vueApp = this;
 
                 axios.post(this.urlAjax + '/update', {
-                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                   _data: this.workshop,
                 })
                 .then(response => {

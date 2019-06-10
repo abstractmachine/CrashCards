@@ -4,14 +4,16 @@
 
 @section('content')
     <div class="d-flex justify-content-start">
-        <card-picker :cards="{{ $cards->toJson() }}"
+{{--         <card-picker :cards="{{ $cards->toJson() }}"
                      base-url="{{ URL::to('/') }}" >
-        </card-picker>
+        </card-picker> --}}
 
         <deck-maker :deck="{{ $deck->toJson() }}"
                     url-ajax="{{ route('deck-manager', ['deck' => $deck->id]) }}" 
+                    base-url="{{ URL::to('/') }}"
                     base-url="{{ URL::to('/') }}" 
                     :author="{{ Auth::user()->toJson() }}"
+                    :cards="{{ $cards->toJson() }}"
                     >                
         </deck-maker>
     </div>

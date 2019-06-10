@@ -1,10 +1,18 @@
-require('./bootstrap');
+require('./bootstrap'); // this is not the boostrap plugin
 
 import Vue from 'vue';
 import VModal from 'vue-js-modal'
 import VueSelect from 'vue-cool-select'
 
-// import { Container, Draggable } from "vue-smooth-dnd";
+import draggable from 'vuedraggable'
+Vue.component('draggable', draggable);
+
+
+// https://www.npmjs.com/package/vue-flash-message
+import VueFlashMessage from 'vue-flash-message';
+Vue.use(VueFlashMessage);
+require('vue-flash-message/dist/vue-flash-message.min.css'); // too replace later
+
 Vue.component('board', require('./components/Board.vue'));
 Vue.component('card-table', require('./components/CardTable.vue'));
 Vue.component('deck-bag', require('./components/DeckBag.vue'));
@@ -40,7 +48,6 @@ Vue.mixin({
 })
 
 const app = new Vue({
-    // components: { Container, Draggable },
     el: '#app',
     methods: {
     	toogleMobileNav: function(){

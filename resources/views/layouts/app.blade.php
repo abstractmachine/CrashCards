@@ -20,11 +20,14 @@
         <main>
             @yield('content')
         </main>
+
+        <flash-message class="flasher"></flash-message>
     </div>
 
 
     {{-- <script src="/js/app.js"></script>  --}}
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+
 </body>
 </html>

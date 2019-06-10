@@ -48,7 +48,7 @@
         methods:{
             updateUser: function(){
                 axios.post(this.urlAjax, {
-                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                   _data: this.modifiedUser,
                 })
                 .then(response => {

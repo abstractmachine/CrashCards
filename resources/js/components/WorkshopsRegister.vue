@@ -102,7 +102,7 @@
                 var vueApp = this;
 
                 axios.post(this.baseUrl + '/' + workshopId + '/remove', {
-                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                 })
                 .then(response => {
                     console.log(response.data);

@@ -70,7 +70,7 @@
                 this.toDelete = index;
 
                 axios.post(this.urlAjax + '/remove', {
-                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                   _data: this.allDecks[index],
                 })
                 .then(response => {

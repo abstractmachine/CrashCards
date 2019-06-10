@@ -59,8 +59,10 @@ Route::middleware(['auth'])->group(function () {
 	Route::post('/decks/{deck}/category/update', 'DeckController@updateCategory')->name('update-category');
 	Route::post('/decks/{deck}/category/delete', 'DeckController@deleteCategory')->name('delete-category');
 	
+	Route::post('/decks/{deck}/cards/update', 'DeckController@updateCards')->name('update-cards-category');
+
 	Route::post('/decks/{deck}/cards/detach/{card}/category/{category}', 'DeckController@detachCard')->name('detach-card-deck');
-	Route::post('/decks/{deck}/cards/save/{card}/category/{category}', 'DeckController@saveCard')->name('save-card-deck');
+	// Route::post('/decks/{deck}/cards/save/{card}/category/{category}', 'DeckController@saveCard')->name('save-card-deck');
 
 	Route::post('/categories/{category}/save/name', 'CategoryController@saveName')->name('save-name-category');
 	Route::post('/categories/{category}/delete', 'CategoryController@destroy')->name('delete-category');

@@ -1,7 +1,7 @@
 
 .card-container, .deck{
     .card{
-        left: 7px;
+        left: 14px;
         border: solid grey 5px;
         position: relative;
         margin: 1rem 0;
@@ -48,4 +48,15 @@
         background-color: white;
         border-color: red;
     }
+}
+
+.empty-card{
+    border: dashed 5px rgb(50,50,50);
+    color:  rgb(50,50,50);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    opacity: 0.5;
+    // pointer-events: none;
 }

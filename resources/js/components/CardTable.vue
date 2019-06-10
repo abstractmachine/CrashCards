@@ -153,7 +153,7 @@
                     }
 
                     axios.post(this.urlAjax + '/add', {
-                      _token: $('meta[name=csrf-token]').attr('content'),
+                      _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                       _data: this.newCard,
                     })
                     .then(response => {
@@ -185,7 +185,7 @@
                     }
 
                     axios.post(this.urlAjax + '/update', {
-                      _token: $('meta[name=csrf-token]').attr('content'),
+                      _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                       _data: this.toUpdate,
                     })
                     .then(response => {
@@ -213,7 +213,7 @@
                 vueApp.toDelete = card;
 
                 axios.post(this.urlAjax + '/remove', {
-                  _token: $('meta[name=csrf-token]').attr('content'),
+                  _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                   _data: card,
                 })
                 .then(response => {

@@ -223,4 +223,43 @@ class DeckController extends Controller
         }
     }
 
+
+    //    ______               __
+    //   / ____/___ __________/ /____
+    //  / /   / __ `/ ___/ __  / ___/
+    // / /___/ /_/ / /  / /_/ (__  )
+    // \____/\__,_/_/   \__,_/____/
+
+
+    public function updateCards(Deck $deck, Request $request){
+        if ($request->ajax()) {
+            $request->validate([
+                '_data' => 'required',
+            ]);
+
+            $user = Auth::user();
+
+            if($deck->author->id == $user->id){
+
+                // $card="";
+                $deck->cards()->detach();
+
+                foreach ($request->_data as $key => $category) {
+                    // return $category['cards'];
+                    foreach ($category['cards'] as $key => $tempCard) {
+                        $card = Card::find($tempCard['id']);
+                        
+                        $deck->cards()->attach($card, ['category_id' => $category['id']]);
+                    }
+                }
+
+                $deck->save();
+                return 'true';
+                // return $card;
+            }else{
+                // return 'false';
+            }
+        }
+    }
+
 }

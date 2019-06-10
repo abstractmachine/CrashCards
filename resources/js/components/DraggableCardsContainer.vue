@@ -1,9 +1,12 @@
 <template>
+    <draggable 
+        v-model="arrayItems" 
+        draggable=".card" 
+        group="deck-cards"
+        class="draggable-zone">
+        <transition-group>
 
-    <Container @drop="onDrop" class="w-100 p-3 cards-container" group-name="cards-container">  
-        <Draggable v-for='(item, key) in arrayItems' :key="key" class="border-dark border mb-3">
-
-            <div class="draggable-item p-2 card">
+            <div v-for="(item, key) in arrayItems" :key="key" class="p-2 card">
                 <button 
                     type="button" 
                     class="close" 
@@ -13,71 +16,68 @@
                 </button>
 
                 <div class="draggable-content">
-                    <h5>{{categoryId}} ,{{key}} <span class="card-name">{{item.name}}</span></h5>
+                    <span class="card-name">{{item.name}}</span></h5>
                     <h6> <span class="card-id">{{item.id}}</span> <span class="card-subtitle">{{item.subtitle}}</span></h6>
                 </div>
-
             </div>
 
-      </Draggable>
+            <div class="card empty-card" v-if="arrayItems.length==0" :key="arrayItems.length + 1" >
+                EMPTY
+            </div>
 
-    </Container>
+        </transition-group>
+
+
+    </draggable>
 
 </template>
 
 <script>
-
-    import { Container, Draggable } from 'vue-smooth-dnd'
-    // import models from './model/models'
-
     export default {  
-        components: {Container, Draggable},
+        components:{
+        },
         props:['items', 'categoryId', 'baseUrl'],
         data: function () {
             return {
             }
         },
         computed:{
-            arrayItems: function(){ 
-                return Object.values(this.items)
-            },
+            arrayItems: {
+                get: function () {
+                    return Object.values(this.items)
+                },
+                set: function (newCards) {
+                    this.$emit('updated-cards', newCards)  
+                }
+            }
         },
         mounted() {
-            // console.log(this.categoryId)
         },
         methods:{
-            onDrop(dragResult) {
-                var { removedIndex, addedIndex, payload } = dragResult
+            // onDrop(dragResult) {
+            //     var { removedIndex, addedIndex, payload } = dragResult
 
-                if (removedIndex === null && addedIndex === null) {
+            //     if (removedIndex === null && addedIndex === null) {
 
-                }else{
+            //     }else{
+            //         if (removedIndex > 0) 
+            //         {
+            //             this.removeCard(this.arrayItems[removedIndex]);
+            //         }
 
-                    if (removedIndex !== null) 
-                    {
-                        this.arrayItems.splice(removedIndex, 1);
-                    }
+            //         if (addedIndex !== null) {
 
-                    if (addedIndex !== null) {
-
-                        var droppedElement = dragResult.droppedElement.getElementsByClassName('draggable-content')[0];
-                        var cardId = parseInt(droppedElement.getElementsByClassName('card-id')[0].innerHTML);
-                        this.saveCard(cardId, addedIndex);
-                    }
-                }
-            },
+            //             var droppedElement = dragResult.droppedElement.getElementsByClassName('draggable-content')[0];
+            //             var cardId = parseInt(droppedElement.getElementsByClassName('card-id')[0].innerHTML);
+            //             this.saveCard(cardId, addedIndex);
+            //         }
+            //     }
+            // },
             removeCard:function(target){                        
                 var vueApp = this;
 
-                if(target.pivot == null){
-                    target.pivot = {};
-                    target.pivot.id = target.pivotId;
-                }
-
-                vueApp.toDelete = target;
-
                 $.post(this.baseUrl+ '/cards/detach/' + target.id + '/category/' + this.categoryId, {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
+                    '_token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                 },function(data)
                 {           
                     if(data === 'true')
@@ -92,7 +92,7 @@
                 vueApp.indexToAdd = addedIndex;
 
                 $.post(this.baseUrl+ '/cards/save/' + id + '/category/' + this.categoryId, {
-                    '_token': $('meta[name=csrf-token]').attr('content'),
+                    '_token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
                 },function(data)
                 {  
                     if(data !== 'false')
@@ -119,6 +119,7 @@
         overflow-y: scroll;
         overflow-x: hidden;
         max-height: 500px;
+        min-height: 100px;
         
         .smooth-dnd-draggable-wrapper{
             // text-align: center;
