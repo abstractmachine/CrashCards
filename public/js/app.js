@@ -57137,7 +57137,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card[data-v-5c3d7434] {\n  width: 150px;\n  height: 300px;\n  position: relative;\n}\n.card .category-name[data-v-5c3d7434] {\n    color: black;\n    position: absolute;\n    bottom: -40px;\n    left: 0;\n    width: 100%;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.workshops-container[data-v-5c3d7434] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: start;\n      -ms-flex-pack: start;\n          justify-content: flex-start;\n  -ms-flex-wrap: nowrap;\n      flex-wrap: nowrap;\n}\n.workshops-container .workshop[data-v-5c3d7434] {\n    margin: 1rem;\n    padding: 1rem;\n    -webkit-box-flex: 1;\n        -ms-flex-positive: 1;\n            flex-grow: 1;\n    border: 9px groove #A48F99;\n    border-radius: 40px;\n    background-color: #e6e6e6;\n}\n", ""]);
 
 // exports
 
@@ -57148,16 +57148,6 @@ exports.push([module.i, "\n.card[data-v-5c3d7434] {\n  width: 150px;\n  height: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -57285,53 +57275,55 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "row mb-3" }, [
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "button",
-            { staticClass: "btn btn-dark", on: { click: _vm.createWorkshop } },
-            [_vm._v(" Add Workshop ")]
-          )
+  return _c("div", {}, [
+    _c(
+      "div",
+      { staticClass: "d-flex justify-content-start align-content-center" },
+      [
+        _c("h3", { staticClass: "mr-3" }, [_vm._v("Workshops:")]),
+        _vm._v(" "),
+        _c("button", { on: { click: _vm.createWorkshop } }, [
+          _vm._v(" Add Workshop ")
         ])
-      ]),
-      _vm._v(" "),
-      _vm._m(0),
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", [
+      _c("h2", [_vm._v("Mes workshops:")]),
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "row" },
+        { staticClass: "workshops-container" },
         [
           _vm._l(_vm.userWorkshop, function(workshop, index) {
             return _c(
-              "div",
+              "a",
               {
                 key: workshop.id,
-                staticClass: "p-3 w-100 border col-3 workshop border-light "
+                attrs: { href: _vm.baseUrl + "/" + workshop.id }
               },
               [
-                workshop.author.id == _vm.user.id
-                  ? _c(
-                      "button",
-                      {
-                        staticClass: "close",
-                        attrs: { type: "button", "aria-label": "Close" },
-                        on: {
-                          click: function($event) {
-                            _vm.deleteWorkshop(workshop.id, index)
+                _c("div", { staticClass: "workshop" }, [
+                  workshop.author.id == _vm.user.id
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "close",
+                          attrs: { type: "button", "aria-label": "Close" },
+                          on: {
+                            click: function($event) {
+                              _vm.deleteWorkshop(workshop.id, index)
+                            }
                           }
-                        }
-                      },
-                      [
-                        _c("span", { attrs: { "aria-hidden": "true" } }, [
-                          _vm._v("×")
-                        ])
-                      ]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("a", { attrs: { href: _vm.baseUrl + "/" + workshop.id } }, [
+                        },
+                        [
+                          _c("span", { attrs: { "aria-hidden": "true" } }, [
+                            _vm._v("×")
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("h3", { attrs: { scope: "row" } }, [
                     _vm._v(_vm._s(workshop.id) + " " + _vm._s(workshop.name))
                   ]),
@@ -57349,35 +57341,34 @@ var render = function() {
             : _vm._e()
         ],
         2
-      ),
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      _c("hr"),
       _vm._v(" "),
-      _vm._m(1),
+      _c("h2", [_vm._v("Tout les workshops:")]),
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "row" },
+        { staticClass: "workshops-container" },
         _vm._l(_vm.allWorkshops, function(workshop, index) {
           return workshop.author.id != _vm.user.id
             ? _c(
-                "div",
+                "a",
                 {
                   key: workshop.id,
-                  staticClass: "p-3 w-100 border col-3 workshop border-light "
+                  staticClass: "p-3",
+                  attrs: { href: _vm.baseUrl + "/" + workshop.id }
                 },
                 [
-                  _c(
-                    "a",
-                    { attrs: { href: _vm.baseUrl + "/" + workshop.id } },
-                    [
-                      _c("h3", { attrs: { scope: "row" } }, [
-                        _vm._v(
-                          _vm._s(workshop.id) + " " + _vm._s(workshop.name)
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(workshop.author.username))])
-                    ]
-                  )
+                  _c("div", { staticClass: "workshop" }, [
+                    _c("h3", { attrs: { scope: "row" } }, [
+                      _vm._v(_vm._s(workshop.id) + " " + _vm._s(workshop.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(workshop.author.username))])
+                  ])
                 ]
               )
             : _vm._e()
@@ -57386,28 +57377,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col" }, [_c("h2", [_vm._v("Mes workshops:")])])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col" }, [
-        _c("hr"),
-        _vm._v(" "),
-        _c("h2", [_vm._v("Tout les workshops:")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

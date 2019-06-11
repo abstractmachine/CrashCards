@@ -33,7 +33,8 @@
     }
 }
 
-.deck-macker .category, .cards-container .card{
+.deck-macker .category, .cards-container .card, .workshops-container .workshop{
+    position: relative;
     .close{
         position: absolute;
         right: -20px;

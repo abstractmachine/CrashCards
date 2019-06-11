@@ -1,60 +1,50 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <div class="row mb-3">
-                <div class="col">
-                  <button class="btn btn-dark" @click="createWorkshop"> Add Workshop </button>
-                </div>
-
-            </div>
+    <div class="">
+        <div class="d-flex justify-content-start align-content-center">
+          <h3 class="mr-3">Workshops:</h3>
+          <button class="" @click="createWorkshop"> Add Workshop </button>
+        </div>
 
             
-            <div class="row">
-                <div class="col">
-                    <h2>Mes workshops:</h2>
-                </div>
-            </div>
+        <div>
+            <h2>Mes workshops:</h2>
+            <div class="workshops-container">
+                <a v-for="(workshop, index) in userWorkshop"  :key="workshop.id" :href="baseUrl + '/' + workshop.id ">
+                    <div class="workshop" >
+                        <button 
+                            type="button" 
+                            class="close" 
+                            aria-label="Close" 
+                            v-on:click="deleteWorkshop(workshop.id, index)"
+                            v-if="workshop.author.id == user.id" >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
 
-            <div class="row">
-                <div v-for="(workshop, index) in userWorkshop"  :key="workshop.id" class="p-3 w-100 border col-3 workshop border-light ">
-            
-                    <button 
-                        type="button" 
-                        class="close" 
-                        aria-label="Close" 
-                        v-on:click="deleteWorkshop(workshop.id, index)"
-                        v-if="workshop.author.id == user.id" >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-
-                    <a :href="baseUrl + '/' + workshop.id " class="">
                         <h3 scope="row" >{{ workshop.id }} {{ workshop.name }}</h3>
                         <td>{{ workshop.author.username }}</td>
-                    </a>
+                    </div>
 
-                </div>  
+                </a>  
 
                 <div class="col" v-if="userWorkshop.lenght == 0">
                     <p>Aucun workshop</p>
                 </div>
             </div>
-            
-            <div class="row">
-                <div class="col">
-                    <hr>
-                    <h2>Tout les workshops:</h2>
-                </div>
-            </div>
+        </div>
 
-            <div class="row">
-                <div v-for="(workshop, index) in allWorkshops"  :key="workshop.id" v-if="workshop.author.id != user.id" class="p-3 w-100 border col-3 workshop border-light ">
-                    <a :href="baseUrl + '/' + workshop.id " class="">
+
+        <div>
+            <hr>
+            <h2>Tout les workshops:</h2>
+            <div class="workshops-container">
+                <a :href="baseUrl + '/' + workshop.id "  v-for="(workshop, index) in allWorkshops"  :key="workshop.id" v-if="workshop.author.id != user.id" class="p-3">
+                    <div class="workshop">
                         <h3 scope="row" >{{ workshop.id }} {{ workshop.name }}</h3>
                         <td>{{ workshop.author.username }}</td>
-                    </a>
-
-                </div>  
+                    </div>
+                </a>  
             </div>
+        </div>
 
         </div>
     </div>
@@ -132,20 +122,18 @@
 
 
 <style scoped lang="scss">
+    .workshops-container{
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
 
-    .card {
-      width: 150px; height: 300px;
-      position: relative;
-
-        .category-name{
-            color: black;
-            position: absolute;
-            bottom: -40px;
-            left: 0;
-            width: 100%;
-            text-align: center;
+        .workshop{
+            margin: 1rem;
+            padding: 1rem;
+            flex-grow: 1;
+            border: 9px groove #A48F99;
+            border-radius: 40px;
+            background-color: rgb(230,230,230);
         }
     }
-
-
 </style>

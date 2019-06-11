@@ -781,8 +781,15 @@ button {
   margin: 0;
 }
 
+.deck-macker .category,
+.cards-container .card,
+.workshops-container .workshop {
+  position: relative;
+}
+
 .deck-macker .category .close,
-.cards-container .card .close {
+.cards-container .card .close,
+.workshops-container .workshop .close {
   position: absolute;
   right: -20px;
   top: -20px;
