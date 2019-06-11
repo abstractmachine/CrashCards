@@ -8,7 +8,7 @@ import draggable from 'vuedraggable'
 Vue.component('draggable', draggable);
 
 
-// https://www.npmjs.com/package/vue-flash-message
+// https://github.com/keen-on-design/vue-flash-message
 import VueFlashMessage from 'vue-flash-message';
 Vue.use(VueFlashMessage);
 require('vue-flash-message/dist/vue-flash-message.min.css'); // too replace later

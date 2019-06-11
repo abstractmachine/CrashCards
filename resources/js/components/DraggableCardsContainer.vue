@@ -54,53 +54,9 @@
         mounted() {
         },
         methods:{
-            // onDrop(dragResult) {
-            //     var { removedIndex, addedIndex, payload } = dragResult
-
-            //     if (removedIndex === null && addedIndex === null) {
-
-            //     }else{
-            //         if (removedIndex > 0) 
-            //         {
-            //             this.removeCard(this.arrayItems[removedIndex]);
-            //         }
-
-            //         if (addedIndex !== null) {
-
-            //             var droppedElement = dragResult.droppedElement.getElementsByClassName('draggable-content')[0];
-            //             var cardId = parseInt(droppedElement.getElementsByClassName('card-id')[0].innerHTML);
-            //             this.saveCard(cardId, addedIndex);
-            //         }
-            //     }
-            // },
-            removeCard:function(target){                        
-                var vueApp = this;
-
-                $.post(this.baseUrl+ '/cards/detach/' + target.id + '/category/' + this.categoryId, {
-                    '_token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
-                },function(data)
-                {           
-                    if(data === 'true')
-                    {                
-                        vueApp.arrayItems.splice(vueApp.arrayItems.indexOf(vueApp.toDelete), 1);
-                        this.$emit('updated-cards', this.arrayItems) 
-                    }
-                }.bind(vueApp));
-            },
-            saveCard:function(id, addedIndex){                  
-                var vueApp = this; 
-                vueApp.indexToAdd = addedIndex;
-
-                $.post(this.baseUrl+ '/cards/save/' + id + '/category/' + this.categoryId, {
-                    '_token': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
-                },function(data)
-                {  
-                    if(data !== 'false')
-                    {              
-                        vueApp.arrayItems.splice(vueApp.indexToAdd, 0, data);
-                        this.$emit('updated-cards', this.arrayItems)  
-                    }
-                }.bind(vueApp));
+            removeCard:function(target){      
+                this.arrayItems.splice(this.arrayItems.indexOf(this.toDelete), 1);
+                this.$emit('updated-cards', this.arrayItems)         
             },
         }
     }

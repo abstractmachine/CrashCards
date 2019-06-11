@@ -9,6 +9,7 @@
         </card-picker> --}}
 
         <deck-maker :deck="{{ $deck->toJson() }}"
+                    :original-deck="{{ $deck->toJson() }}"
                     url-ajax="{{ route('deck-manager', ['deck' => $deck->id]) }}" 
                     base-url="{{ URL::to('/') }}"
                     base-url="{{ URL::to('/') }}" 

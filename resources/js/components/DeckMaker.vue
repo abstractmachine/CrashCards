@@ -23,7 +23,7 @@
                 <input type="text" class="form-control auto-input" v-model="deck.name" v-on:focusout="saveDeckName">
 
                 <button class="ml-3" @click="addCategory"> add category </button>
-                <button class="ml-3" @click="saveDeck"> SAVE </button>
+                <button class="ml-3" @click="saveDeck" v-if="saveEnable"> Enregistrer </button> 
             </div>  
 
             <div class="deck">
@@ -64,6 +64,8 @@
         props:{
             deck: {
             }, 
+            originalDeck: {
+            }, 
             urlAjax:{},
             baseUrl:{},
             author:{},
@@ -74,19 +76,69 @@
             return {
                 allCategories: this.deck.categories,
                 allCards: this.cards,
+                originalDeckCards: [],
+                originalCategories: this.originalDeck.categories,
+                saveEnable: false
             }
+        },
+        watch: {
         },
         computed:{
         },
         mounted() {
+            for (var i = 0; i < this.originalDeck.categories.length; i++) {
+                for (var y = 0; y < this.originalDeck.categories[i].cards.length; y++) {
+                    this.originalDeck.categories[i].cards[y].category_id = this.originalDeck.categories[i].id;
+                }
+            }
+            // console.log(this.originalDeckCards);
         },
         methods:{
+            cardsIsModified: function(){
+                console.log("cardsIsModified")
+                if(this.allCategories.length == this.originalCategories.length){
+
+                    for (var i = 0; i < this.allCategories.length; i++) {
+
+                        if(this.allCategories[i].cards.length == this.originalCategories[i].cards.length){
+
+                            for (var y = 0; y < this.allCategories[i].cards.length; y++) {
+
+                                if(this.allCategories[i].cards[y].name != this.originalCategories[i].cards[y].name ||
+                                    this.allCategories[i].cards[y].subtitle != this.originalCategories[i].cards[y].subtitle ||
+                                    this.allCategories[i].cards[y].id != this.originalCategories[i].cards[y].id ||
+                                    this.allCategories[i].cards[y].created_at != this.originalCategories[i].cards[y].created_at ||
+                                    this.allCategories[i].cards[y].updated_at != this.originalCategories[i].cards[y].updated_at
+                                    ){
+
+                                    console.log('card is differente ')
+                                    return true;
+                                }
+
+                            }
+
+                            return false;
+                        }
+                        else{
+                            console.log('category cards length is differente.')
+                            return true;
+                        }
+
+                        console.log('end chceckin')
+
+                    }
+
+                    return false;
+                }
+                else {
+                    console.log('category length size is differente ')
+                    return true;
+                }
+
+            },
             saveDeck: function(){
                 var vueApp = this;
-                this.$emit('saveDeckCards')
-                // this.flash('Saved! 😊', 'success', {
-                //   timeout: 1000
-                // });
+
                 // console.log(this.allCategories)
 
                 axios.post(this.urlAjax + '/cards/update', {
@@ -96,10 +148,23 @@
                 .then(response => {
                     console.log(response.data)
 
-                    // if(response.data == true){
-                    // }
-                    // else{
-                    // }
+                    if(response.data == true){
+                        this.flash('Saved! 😊', 'success', {
+                          timeout: 1000,
+                        });
+                        setTimeout(function(){
+                            //clone 
+                            vueApp.originalCategories = JSON.parse(JSON.stringify(vueApp.allCategories));
+                            this.saveEnable = this.cardsIsModified();
+                            console.log("this.saveEnable = " + this.saveEnable)
+
+                        }.bind(vueApp), 1000)
+                    }
+                    else{
+                        this.flash('Non enregistré, quelque chose ne vas pas.', 'error', {
+                          timeout: 1000
+                        });
+                    }
                 })
                 .catch(e => {
                   console.log(e)
@@ -113,6 +178,8 @@
                 );
 
                 tempCategory.cards = event;
+
+                this.saveEnable = this.cardsIsModified();
             },
             updateCategory:function(categoryId, event){
                 this.autoInputReset(event.target);
@@ -183,7 +250,6 @@
                 var vueApp = this; 
 
                 this.autoInputReset(event.target);
-                console.log(document.querySelector('meta[name=csrf-token]').getAttribute('content'))
 
                 axios.post(this.baseUrl + '/decks/' + this.deck.id + '/update', {
                   _token: document.querySelector('meta[name=csrf-token]').getAttribute('content'),
