@@ -56286,7 +56286,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                         for (var y = 0; y < this.allCategories[i].cards.length; y++) {
 
                             if (this.allCategories[i].cards[y].name != this.originalCategories[i].cards[y].name || this.allCategories[i].cards[y].subtitle != this.originalCategories[i].cards[y].subtitle || this.allCategories[i].cards[y].id != this.originalCategories[i].cards[y].id || this.allCategories[i].cards[y].created_at != this.originalCategories[i].cards[y].created_at || this.allCategories[i].cards[y].updated_at != this.originalCategories[i].cards[y].updated_at) {
-
                                 console.log('card is differente ');
                                 return true;
                             }

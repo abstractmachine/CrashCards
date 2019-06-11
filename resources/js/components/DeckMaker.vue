@@ -110,7 +110,6 @@
                                     this.allCategories[i].cards[y].created_at != this.originalCategories[i].cards[y].created_at ||
                                     this.allCategories[i].cards[y].updated_at != this.originalCategories[i].cards[y].updated_at
                                     ){
-
                                     console.log('card is differente ')
                                     return true;
                                 }
