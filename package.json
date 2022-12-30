@@ -24,14 +24,14 @@
     "bootstrap": "^4.0.0",
     "cross-env": "^5.1",
     "jquery": "^3.2",
-    "laravel-mix": "^2.0",
+    "laravel-mix": "^6.0",
     "lodash": "^4.17.5",
     "popper.js": "^1.12",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
+    "stylus-loader": "^7.1.0",
     "vue": "^2.5.7",
     "vue-cli-plugin-vuetify": "^0.4.5",
-    "vuetify-loader": "^1.0.5",
+    "vuetify-loader": "^1.9.2",
     "webpack-livereload-plugin": "^1.2.0"
   }
 }
